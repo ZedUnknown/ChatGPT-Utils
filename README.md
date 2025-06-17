@@ -13,8 +13,7 @@
 Easily view how many tokens your selected text will consume. Ideal for free & paid users to keep track of token limits in real-time.
 
 - Works directly on the page
-- Non-intrusive UI with automatic display when text is selected
-- Powered by OpenAI-compatible tokenizer (`o200k` and `cl100k` support)
+- Powered by OpenAI-compatible tokenizers (`o200k` and `cl100k` support)
 
 &nbsp;
 
