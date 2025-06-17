@@ -1,14 +1,10 @@
+// Script injection
 function injectScriptToPage(filePath, type, id) {
     const script = document.createElement('script');
     script.src = chrome.runtime.getURL(filePath);
     script.type = type;
-
     if (id) script.id = id;
-
     document.head.appendChild(script);
-    // script.onload = () => {
-    //     script.remove(); // Clean up after execution
-    // };
     script.onerror = (err) => {
         console.error(`Failed to load script: ${filePath}`);
     }

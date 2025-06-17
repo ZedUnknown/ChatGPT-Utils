@@ -1,4 +1,3 @@
-
 // ===[Handles the Icon State]===
 chrome.action.onClicked.addListener(async (tab) => {
   await chrome.scripting.executeScript({

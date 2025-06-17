@@ -107,7 +107,7 @@ function createOverlay() {
     console.log("| Overlay Created", document.getElementById(overlayID));
 }
 
-// Overlay toggle logic
+// Overlay toggle
 function toggleOverlay() {
     const overlay = document.getElementById(overlayID);
     // If overlay doesn't exist (sometimes it doesn't get created)
