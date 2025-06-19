@@ -35,9 +35,8 @@ The current version only includes the **Token Counter**, but more utilities are 
 - 📊 Token Budgeting per Model
 - 🎫 Multi-token Counters
 - 💡 Context Preview Tool
-- and many more...
-
 - 🧩 Utility Selection UI
+- 🛠️ and many more...
 
 Stay tuned for regular feature drops and UI improvements!
 
