@@ -19,11 +19,19 @@ Easily view how many tokens your selected text will consume. Ideal for free & pa
 
 ## 📦 Installation
 
-1. Clone or download this repository.
-2. Go to `chrome://extensions/` in your browser.
-3. Enable **Developer Mode** (top right corner).
-4. Click **"Load unpacked"** and select the root folder of this project.
-5. Pin the extension to your toolbar for easy access.
+1. **Clone or download this repository:**
+Extract the downloaded `.zip` to a new folder.
+
+2. **Open your browser's Extensions page:**
+Type your_browser://extensions/ into your address bar and press Enter.
+   - **For Chrome:** Replace `your_browser` in with `chrome`.
+   - **For Opera or Opera GX:** Replace `your_browser` with `opera`.
+
+3. **Enable Developer Mode:** 
+In the top-right corner (in chrome) or somewhere on the extensions page, locate and toggle on `"Developer mode"`.
+
+4. **Load the unpacked extension:** 
+Click the "Load unpacked" button (usually in the top-left corner after enabling developer mode). Then, navigate to and select the folder of the extracted from step 1.
 
 &nbsp;
 
