@@ -38,10 +38,11 @@
     ],
     "icons": {
         "16": "assets/icons/default/icon16.png",
+        "32": "assets/icons/default/icon32.png",
         "48": "assets/icons/default/icon48.png",
         "128": "assets/icons/default/icon128.png"
     },
     "action": {
-        "default_title": "Start the extension"
+        "default_title": "ChatGPT Utils"
     }
 }

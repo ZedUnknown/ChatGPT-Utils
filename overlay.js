@@ -4,16 +4,19 @@
 const iconStates = {
     'normal' : {
         16: "./assets/icons/default/icon16.png",
+        32: "./assets/icons/default/icon32.png",
         48: "./assets/icons/default/icon48.png",
         128: "./assets/icons/default/icon128.png"
     },
     'active' : {
         16: "./assets/icons/active/icon16.png",
+        32: "./assets/icons/active/icon32.png",
         48: "./assets/icons/active/icon48.png",
         128: "./assets/icons/active/icon128.png"
     },
     'disabled' : {
         16: "./assets/icons/disabled/icon16.png",
+        32: "./assets/icons/disabled/icon32.png",
         48: "./assets/icons/disabled/icon48.png",
         128: "./assets/icons/disabled/icon128.png"
     }
@@ -23,7 +26,7 @@ const overlayID = "GPT-Utils-Overlay";
 // ===[Overlay]===
 function createOverlay() {
     if (document.getElementById("GPT-Utils")) return;
-    console.log("| Creating Overlay...");
+    // console.log("| Creating Overlay...");
     const container = document.createElement('div');
     container.id = overlayID;
     container.style.display = "none";
@@ -104,7 +107,7 @@ function createOverlay() {
     `;
 
     document.body.appendChild(container);
-    console.log("| Overlay Created", document.getElementById(overlayID));
+    // console.log("| Overlay Created", document.getElementById(overlayID));
 }
 
 // Overlay toggle
