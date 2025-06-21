@@ -9,7 +9,7 @@
 
 ## 🚀 Features
 
-✅ **Token Counter (v1.0.0)**  
+✅ **Token Counter**  
 Easily view how many tokens your selected text will consume. Ideal for free & paid users to keep track of token limits in real-time.
 
 - Works directly on the page
