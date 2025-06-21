@@ -22,7 +22,7 @@ Easily view how many tokens your selected text will consume. Ideal for free & pa
 1. **Clone or download this repository:**
 Extract the downloaded `.zip` to a new folder.
 
-2. **Open your browser's Extensions page:**
+2. **Open your browser's Extensions page:** 
 Type your_browser://extensions/ into your address bar and press Enter.
    - **For Chrome:** Replace `your_browser` in with `chrome`.
    - **For Opera or Opera GX:** Replace `your_browser` with `opera`.
