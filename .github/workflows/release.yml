@@ -71,6 +71,5 @@ jobs:
           files: |
             docs/${{ steps.set_filenames.outputs.CRX_FILENAME }}
             ${{ steps.set_filenames.outputs.ZIP_FILENAME }}
-            docs/update.xml
           # Use release name, if not using the tag name directly
           name: "Release ${{ steps.set_filenames.outputs.VERSION }}"
