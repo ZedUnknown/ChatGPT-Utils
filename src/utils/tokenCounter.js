@@ -1,5 +1,6 @@
 // ===[Constants]===
 const DEBUG = false;
+const PREFIX = 'Token Counter |';
 
 let bottomContainer = document.getElementById("thread-bottom");
 let tokenCounterContainer;
@@ -70,12 +71,12 @@ window.addEventListener('load', () => {
 
 function checkLibraries() {
 	const checkLibraries = setInterval(() => {
-		if (DEBUG) console.log("Token Counter | Checking for the required tokenizer libraries...");
+		if (DEBUG) console.log(`${PREFIX} Checking for the required tokenizer libraries...`);
 		if (!document.getElementById('o200k_base') && !document.getElementById('cl100k_base')) {
-			console.warn("Token Counter | The required tokenizer scripts ('o200k_base' or 'cl100k_base') are missing. Please ensure they are loaded.");
+			console.warn(`${PREFIX} The required tokenizer scripts ('o200k_base' or 'cl100k_base') are missing. Please ensure they are loaded.`);
 		} else {
 			clearInterval(checkLibraries);
-			if (DEBUG) console.log("Token Counter | The required tokenizer scripts ('o200k_base' or 'cl100k_base') have been loaded.");
+			if (DEBUG) console.log(`${PREFIX} The required tokenizer scripts ('o200k_base' or 'cl100k_base') have been loaded.`);
 
 			// update the tokenizer
 			tokenizer = window.GPTTokenizer_o200k_base; // multiple-tokenization ability in future
@@ -90,15 +91,15 @@ function checkLibraries() {
 
 function main() {
 	const tryCreate = setInterval(() => {
-		if (DEBUG) console.log("Token Counter | Attempting to locate the user typing box or area...");
+		if (DEBUG) console.log(`${PREFIX} Attempting to locate the user typing box or area...`);
 
 		// check if tokenCounterContainer exists
 		if (!document.getElementById(tokenCounterContainerID)) {
-			if (DEBUG) console.log("Token Counter | The tokenCounterContainer was not found. Attempting to locate it by class names...");
+			if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was not found. Attempting to locate it by class names...`);
 			tokenCounterContainer = document.getElementsByClassName(tokenCounterContainerClass_Dark)[0] || document.getElementsByClassName(tokenCounterContainerClass_Light)[0];
-			if (DEBUG) console.log("Token Counter | tokenCounterContainer: ", tokenCounterContainer);
+			if (DEBUG) console.log(`${PREFIX} tokenCounterContainer: ${tokenCounterContainer}`);
 			if (!tokenCounterContainer) {
-				if (DEBUG) console.log("Token Counter | Proceeding with path guessing...");
+				if (DEBUG) console.log(`${PREFIX} Proceeding with path guessing...`);
 				let paths = [
 					[0, 0, 1, 1, 0],
 					[0, 0, 1, 0, 0]
@@ -108,7 +109,7 @@ function main() {
 				if (!tokenCounterContainer) {
 					// * Under Development *
 					// take main HTML as the container
-					console.warn("Token Counter | The bottomContainer could not be found by structure or class names.");
+					console.warn(`${PREFIX} The bottomContainer could not be found by structure or class names.`);
 					clearInterval(tryCreate);
 					return;
 				}
@@ -118,7 +119,7 @@ function main() {
 		}
 
 		clearInterval(tryCreate);
-		if (DEBUG) console.log("Token Counter | The bottom container was successfully located: ", tokenCounterContainer);
+		if (DEBUG) console.log(`${PREFIX} The bottom container was successfully located: ${tokenCounterContainer}`);
 
 		setTimeout(() => setUp(), 100);
 
@@ -127,13 +128,13 @@ function main() {
 
 // ===[Set Up]===
 function setUp() {
-	if (DEBUG) console.log("Token Counter | Setting up the token counter...");
+	if (DEBUG) console.log(`${PREFIX} Setting up the token counter...`);
 	fixUI(createTokenCounter); // create after UI is fixed
 
 	// only add the event listener once
 	if (!selectionListenerAdded) {
 		document.addEventListener('selectionchange', () => {
-			// if (DEBUG) console.log("Token Counter | The selection has changed.");
+			// if (DEBUG) console.log(`${PREFIX} The selection has changed.`);
 			checkSelection();
 		});
 		selectionListenerAdded = true;
@@ -144,7 +145,7 @@ function setUp() {
 function createTokenCounter() {
 	// update theme if exsits
 	if (document.getElementById(tokenCounterID)) {
-		if (DEBUG) console.log("Token Counter | Updating the token counter theme to: " + currentTheme + ".");
+		if (DEBUG) console.log(`${PREFIX} Updating the token counter theme to: ${currentTheme}.`);
 		tokenCounter.style.backgroundColor = theme[currentTheme]['bgToken'];
 		tokenCounter.style.color = theme[currentTheme]['colorToken'];
 		tokenCounter.style.boxShadow = theme[currentTheme]['boxShadow'];
@@ -152,11 +153,11 @@ function createTokenCounter() {
 	} else {
 		// try.!.!.!. to create the token counter
 		const tryCreate = setInterval(() => {
-			if (DEBUG) console.log("Token Counter | Attempting to create the token counter...");
+			if (DEBUG) console.log(`${PREFIX} Attempting to create the token counter...`);
 			if (!document.getElementById(tokenCounterID)) {
 				clearInterval(tryCreate);
-				if (DEBUG) console.log("Token Counter | The token counter has been created successfully.");
-				if (DEBUG) console.log("Token Counter | Inserting the token counter into: " + tokenCounterContainer);
+				if (DEBUG) console.log(`${PREFIX} The token counter has been created successfully.`);
+				if (DEBUG) console.log(`${PREFIX} Inserting the token counter into: ${tokenCounterContainer}`);
 				tokenCounter.id = tokenCounterID;
 				tokenCounter.style.display = 'none';
 				tokenCounter.style.position = 'absolute';
@@ -174,9 +175,9 @@ function createTokenCounter() {
 				// again check if tokenCounterContainer exists
 				if (tokenCounterContainer) {
 					tokenCounterContainer.appendChild(tokenCounter);
-					if (DEBUG) console.log("Token Counter | The token counter has been inserted successfully.");
+					if (DEBUG) console.log(`${PREFIX} The token counter has been inserted successfully.`);
 				} else {
-					console.warn("Token Counter | The tokenCounterContainer is not available. The token counter cannot be appended.");
+					console.warn(`${PREFIX} The tokenCounterContainer is not available. The token counter cannot be appended.`);
 				}
 			} else {
 				clearInterval(tryCreate);
@@ -190,7 +191,7 @@ function createTokenCounter() {
 function countTokens(text, tokenizerType) {
 	// * Under Development *
 	// if (tokenizerType) setTokenizer(tokenizerType);
-	if (DEBUG) console.log("Token Counter | Text to be tokenized: " + text);
+	if (DEBUG) console.log(`${PREFIX} Text to be tokenized: ${text}`);
 	if (text) {
 		const encode = tokenizer.encode(text);
 		showTokenCount(encode);
@@ -225,15 +226,15 @@ function showTokenCount(tokens) {
 function setTokenizer(name) {
 	if (tokenizers.includes(name)) {
 		currentTokenizer = name;
-		if (DEBUG) console.log("Token Counter | The tokenizer has been switched to: " + name + ".");
+		if (DEBUG) console.log(`${PREFIX} The tokenizer has been switched to: ${name}.`);
 	}
-	if (DEBUG) console.log("Token Counter | Tokenizing with: " + tokenizer + ".");
+	if (DEBUG) console.log(`${PREFIX} Tokenizing with: ${tokenizer}.`);
 }
 
 // ===[Update Theme]===
 function updateTheme() {
 	currentTheme = detectTheme.classList.contains('dark') ? 'dark' : 'light';
-	if (DEBUG) console.log("Token Counter | The theme has been updated to: " + currentTheme + ".");
+	if (DEBUG) console.log(`${PREFIX} The theme has been updated to: ${currentTheme}.`);
 	createTokenCounter();
 }
 
@@ -241,7 +242,7 @@ function updateTheme() {
 // this function may change over time since it require constant adaptation to the
 // changes made to the UI by Oppenheimer, *caugh OpenAI
 function fixUI(callback) {
-	if (DEBUG) console.log("Token Counter | Fixing the user interface elements...");
+	if (DEBUG) console.log(`${PREFIX} Fixing the user interface elements...`);
 	if (tokenCounterContainer) {
 		tokenCounterContainer.classList.remove('rounded-[28px]');
 		tokenCounterContainer.style.borderRadius = '28px 28px 28px 28px';
@@ -249,10 +250,10 @@ function fixUI(callback) {
 		tokenCounterContainer.style.overflow = 'visible';
 		tokenCounterContainer.style.position = 'relative';
 		tokenCounterContainer.id = tokenCounterContainerID;
-		if (DEBUG) console.log("Token Counter | The user interface elements have been fixed.");
+		if (DEBUG) console.log(`${PREFIX} The user interface elements have been fixed.`);
 		callback();
 	} else {
-		if (DEBUG) console.log("Token Counter | Failed to fix the user interface elements.");
+		if (DEBUG) console.log(`${PREFIX} Failed to fix the user interface elements.`);
 	}
 }
 
@@ -281,25 +282,25 @@ function setupThemeObserver() {
 	currentTheme = detectTheme.classList.contains('dark') ? 'dark' : 'light';
 	const htmlElement = detectTheme;
 	observeClassChange(htmlElement, (newClass) => {
-		if (DEBUG) console.log('Token Counter | The class attribute has changed: ' + newClass + '.');
+		if (DEBUG) console.log(`${PREFIX} The class attribute has changed: ${newClass}.`);
 		updateTheme();
 	});
 }
 
 // remove added elements
 function removeAddedElements() {
-	if (DEBUG) console.log("Token Counter | Removing the added elements...");
+	if (DEBUG) console.log(`${PREFIX} Removing the added elements...`);
 	const elementIDs = ['tokenCounter', 'tokenCounterContainer'];
 	elementIDs.forEach(id => {
 		const element = document.getElementById(id);
 		if (element) {
 			element.remove();
-			if (DEBUG) console.log("Token Counter | The element has been removed: " + id + ".");
+			if (DEBUG) console.log(`${PREFIX} The element has been removed: ${id}.`);
 		} else {
 			const element = document.getElementsByClassName(id)[0];
 			if (element) {
 				element.remove();
-				if (DEBUG) console.log("Token Counter | The element has been removed: " + id + ".");
+				if (DEBUG) console.log(`${PREFIX} The element has been removed: ${id}.`);
 			}
 		}
 	})
@@ -340,13 +341,13 @@ function observePageChange() {
 	new MutationObserver(() => {
 		const currentUrl = location.href;
 		if (currentUrl !== lastUrl) {
-			if (DEBUG) console.log("Token Counter | The page has changed from " + lastUrl + " to " + currentUrl + ".");
+			if (DEBUG) console.log(`${PREFIX} The page has changed from ${lastUrl} to ${currentUrl}.`);
 
 			// ignore specific in-window URLs
 			const ignoreUrls = ['settings', 'pricing']
 			const hash = currentUrl.split('#')[1];
 			if (hash && ignoreUrls.includes(hash)) {
-				if (DEBUG) console.log('Token Counter | The URL has been ignored.');
+				if (DEBUG) console.log(`${PREFIX} The URL has been ignored.`);
 				return;
 			};
 
