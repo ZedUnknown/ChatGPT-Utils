@@ -40,6 +40,8 @@ Before pushing any tags to trigger the workflow, you **MUST manually generate th
 	- `extension_name.crx`
 
 6. **Rename and Place in `docs/`:**
+  - Remove existing `.crx` files from the `docs/` directory (if any).
+  
 	- Rename the generated `.crx` file to match the expected naming convention (e.g., `ChatGPT-Utils-v<VERSION>.crx`, where `<VERSION>` is the release version like `1.0.0`. The release version **MUST** be higher than previous version).
 
 	- The `v` prefix **MUST** be in lowercase.

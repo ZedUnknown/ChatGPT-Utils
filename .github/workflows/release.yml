@@ -43,14 +43,11 @@ jobs:
 
       - name: Generate update.xml
         run: |
-          # Ensure docs directory exists (redundant if CRX is already committed there, but safe)
-          mkdir -p docs
-          
           # Using printf for cleaner multi-line XML generation
           printf '<?xml version="1.0" encoding="UTF-8"?>\n' > docs/update.xml
           printf '<gupdate xmlns="http://www.google.com/update2/response" protocol="2.0">\n' >> docs/update.xml
           printf '  <app appid="neojikhlkcommekalkmemddhnfflkgln">\n' >> docs/update.xml # <<< REPLACE WITH YOUR ACTUAL EXTENSION ID
-          printf '    <updatecheck codebase="https://zedunknown.github.io/ChatGPT-Utils/docs/%s" version="%s" />\n' "${{ steps.set_filenames.outputs.CRX_FILENAME }}" "${{ steps.set_filenames.outputs.VERSION }}" >> docs/update.xml
+          printf '    <updatecheck codebase="https://zedunknown.github.io/ChatGPT-Utils/%s" version="%s" />\n' "${{ steps.set_filenames.outputs.CRX_FILENAME }}" "${{ steps.set_filenames.outputs.VERSION }}" >> docs/update.xml
           printf '  </app>\n' >> docs/update.xml
           printf '</gupdate>\n' >> docs/update.xml
           
@@ -58,16 +55,10 @@ jobs:
           EXTENSION_ID: neojikhlkcommekalkmemddhnfflkgln
 
       - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4 # Updated to v4
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
-          # If GitHub Pages source is 'main' branch and '/docs' folder,
-          # remove 'publish_branch' to let it default to 'gh-pages',
-          # OR ensure your GH Pages is set to use the 'gh-pages' branch.
-          # If you truly want to publish directly to 'main' branch, keep this,
-          # but be aware it might overwrite commits if not handled carefully.
-          # publish_branch: main # Keep this if GH Pages is configured to serve from 'main' branch
 
       - name: Zip extension source for release asset
         run: |
@@ -75,11 +66,11 @@ jobs:
           zip -r ../${{ steps.set_filenames.outputs.ZIP_FILENAME }} .
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2 # Updated to v2
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             docs/${{ steps.set_filenames.outputs.CRX_FILENAME }}
             ${{ steps.set_filenames.outputs.ZIP_FILENAME }}
             docs/update.xml
-          # Optionally add a release name, if not using the tag name directly
+          # Use release name, if not using the tag name directly
           name: "Release ${{ steps.set_filenames.outputs.VERSION }}"
