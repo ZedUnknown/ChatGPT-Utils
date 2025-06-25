@@ -137,66 +137,66 @@ Chrome's auto-update work when the `update.xml` updated to a new version and fil
 Based on this, you'll need to remove the CRX building steps from your workflow and potentially add a check for the file's existence.
 
 ```yaml
-name: Release Extension (Manual CRX)
+  name: Release Extension (Manual CRX)
 
-on:
-push:
-	tags:
-	- 'v*'
+  on:
+    push:
+      tags:
+        - 'v*'
 
-jobs:
-release: # Renamed job to 'release' for clarity
-	runs-on: ubuntu-latest
-	permissions:
-	contents: write
-	pages: write
-	id-token: write
+  jobs:
+    release: # Renamed job to 'release' for clarity
+      runs-on: ubuntu-latest
+      permissions:
+        contents: write
+        pages: write
+        id-token: write
 
-	steps:
-	- name: Checkout repository
-		uses: actions/checkout@v4
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
 
-	# Removed 'Setup Node.js', 'Install CRX3 CLI', 'Restore private key',
-	# 'Zip extension', and 'Build .crx from source' steps
-	# as CRX generation is now manual and pre-workflow.
+        # Removed 'Setup Node.js', 'Install CRX3 CLI', 'Restore private key',
+        # 'Zip extension', and 'Build .crx from source' steps
+        # as CRX generation is now manual and pre-workflow.
 
-	- name: Verify Manually Placed CRX Exists
-		# This assumes the CRX file naming convention will be ChatGPT-Utils-v<tag_name>.crx
-		# Adjust 'ChatGPT-Utils-v' prefix if your naming differs.
-		run: |
-		CRX_FILENAME="ChatGPT-Utils-v${{ github.ref_name }}.crx"
-		if [ ! -f "docs/${CRX_FILENAME}" ]; then
-			echo "Error: Manually generated CRX file 'docs/${CRX_FILENAME}' not found!"
-			echo "Please generate the CRX locally, place it in the 'docs/' folder, and commit it before pushing the tag."
-			exit 1
-		fi
-		echo "Verified: CRX file 'docs/${CRX_FILENAME}' found."
+        - name: Verify Manually Placed CRX Exists
+          # This assumes the CRX file naming convention will be ChatGPT-Utils-v<tag_name>.crx
+          # Adjust 'ChatGPT-Utils-v' prefix if your naming differs.
+          run: |
+            CRX_FILENAME="ChatGPT-Utils-v${{ github.ref_name }}.crx"
+            if [ ! -f "docs/${CRX_FILENAME}" ]; then
+              echo "Error: Manually generated CRX file 'docs/${CRX_FILENAME}' not found!"
+              echo "Please generate the CRX locally, place it in the 'docs/' folder, and commit it before pushing the tag."
+              exit 1
+            fi
+            echo "Verified: CRX file 'docs/${CRX_FILENAME}' found."
 
-	- name: Generate update.xml
-		run: |
-		CRX_FILENAME="ChatGPT-Utils-v${{ github.ref_name }}.crx" # Ensure filename matches the manually placed one
-		printf '<?xml version="1.0" encoding="UTF-8"?>\n' > docs/update.xml
-		printf '<gupdate xmlns="http://www.google.com/update2/response" protocol="2.0">\n' >> docs/update.xml
-		printf '  <app appid="neojikhlkcommekalkmemddhnfflkgln">\n' >> docs/update.xml
-		printf '    <updatecheck codebase="https://zedunknown.github.io/ChatGPT-Utils/docs/%s" version="%s" />\n' "${CRX_FILENAME}" "${{ github.ref_name }}" >> docs/update.xml
-		printf '  </app>\n' >> docs/update.xml
-		printf '</gupdate>\n' >> docs/update.xml
+        - name: Generate update.xml
+          run: |
+            CRX_FILENAME="ChatGPT-Utils-v${{ github.ref_name }}.crx" # Ensure filename matches the manually placed one
+            printf '<?xml version="1.0" encoding="UTF-8"?>\n' > docs/update.xml
+            printf '<gupdate xmlns="http://www.google.com/update2/response" protocol="2.0">\n' >> docs/update.xml
+            printf '  <app appid="neojikhlkcommekalkmemddhnfflkgln">\n' >> docs/update.xml
+            printf '    <updatecheck codebase="https://zedunknown.github.io/ChatGPT-Utils/docs/%s" version="%s" />\n' "${CRX_FILENAME}" "${{ github.ref_name }}" >> docs/update.xml
+            printf '  </app>\n' >> docs/update.xml
+            printf '</gupdate>\n' >> docs/update.xml
 
-	- name: Verify generated files
-		run: |
-		ls -l docs/
-		cat docs/update.xml
+        - name: Verify generated files
+          run: |
+            ls -l docs/
+            cat docs/update.xml
 
-	- name: Deploy to GitHub Pages
-		uses: peaceiris/actions-gh-pages@v4
-		with:
-		github_token: ${{ secrets.GITHUB_TOKEN }}
-		publish_dir: ./docs
+        - name: Deploy to GitHub Pages
+          uses: peaceiris/actions-gh-pages@v4
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./docs
 
-    - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            ChatGPT-Utils-${{ github.ref_name }}.crx
-            update.xml
+        - name: Create GitHub Release
+          uses: softprops/action-gh-release@v1
+          with:
+            files: |
+              ChatGPT-Utils-${{ github.ref_name }}.crx
+              update.xml
 ```
