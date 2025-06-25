@@ -1,0 +1,49 @@
+{
+    "manifest_version": 3,
+    "name": "ChatGPT-Utils",
+    "version": "1.0.0",
+    "author": "Zed Unknown",
+    "description": "Various Utilities for ChatGPT",
+    "permissions": ["scripting", "activeTab", "webNavigation"],
+    "host_permissions": [
+        "https://chat.openai.com/*",
+        "http://chat.openai.com/*",
+        "https://chatgpt.com/*",
+        "http://chatgpt.com/*"
+    ],
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "content_scripts": [
+        {
+            "matches": [
+                "https://chat.openai.com/*",
+                "http://chat.openai.com/*",
+                "https://chatgpt.com/*",
+                "http://chatgpt.com/*"
+            ],
+            "js": ["main.js"],
+            "run_at": "document_end"
+        }
+    ],
+    "web_accessible_resources": [
+        {
+            "resources": [
+                "libs/*.js",
+                "utils/tokenCounter.js"
+            ],
+            "matches": ["<all_urls>"]
+        }
+    ],
+    "icons": {
+        "16": "assets/icons/default/icon16.png",
+        "32": "assets/icons/default/icon32.png",
+        "48": "assets/icons/default/icon48.png",
+        "128": "assets/icons/default/icon128.png"
+    },
+    "action": {
+        "default_title": "ChatGPT Utils"
+    },
+    "update_url": "https://zedunknown.github.io/ChatGPT-Utils/update.xml"
+}

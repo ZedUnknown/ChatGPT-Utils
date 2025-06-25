@@ -1,0 +1,84 @@
+name: Publish Extension Files
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write # Needed for creating GitHub Releases
+  pages: write    # Needed for deploying to GitHub Pages
+  id-token: write # Recommended for peaceiris/actions-gh-pages@v4
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4 # Updated to v4
+
+      - name: Set dynamic filenames
+        id: set_filenames # Add an ID to easily reference outputs
+        run: |
+          VERSION="${{ github.ref_name }}"
+          # CRX file is expected to be in docs/ and named with 'v' prefix
+          CRX_FILENAME="ChatGPT-Utils-${VERSION}.crx" # Make sure this matches your local manual generation filename
+          # Adjust the name for the ZIP if you want 'v' included there too
+          ZIP_FILENAME="ChatGPT-Utils-${VERSION}.zip"
+          echo "CRX_FILENAME=$CRX_FILENAME" >> $GITHUB_OUTPUT
+          echo "ZIP_FILENAME=$ZIP_FILENAME" >> $GITHUB_OUTPUT
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Verify Manually Placed CRX Exists in docs/
+        run: |
+          # The CRX is expected to be committed into docs/
+          if [ ! -f "docs/${{ steps.set_filenames.outputs.CRX_FILENAME }}" ]; then
+            echo "Error: Manually generated CRX file 'docs/${{ steps.set_filenames.outputs.CRX_FILENAME }}' not found!"
+            echo "Please generate the CRX locally using Chrome, place it in the 'docs/' folder, and commit it before pushing the tag."
+            exit 1
+          fi
+          echo "Verified: CRX file 'docs/${{ steps.set_filenames.outputs.CRX_FILENAME }}' found and ready."
+
+      - name: Generate update.xml
+        run: |
+          # Ensure docs directory exists (redundant if CRX is already committed there, but safe)
+          mkdir -p docs
+          
+          # Using printf for cleaner multi-line XML generation
+          printf '<?xml version="1.0" encoding="UTF-8"?>\n' > docs/update.xml
+          printf '<gupdate xmlns="http://www.google.com/update2/response" protocol="2.0">\n' >> docs/update.xml
+          printf '  <app appid="neojikhlkcommekalkmemddhnfflkgln">\n' >> docs/update.xml # <<< REPLACE WITH YOUR ACTUAL EXTENSION ID
+          printf '    <updatecheck codebase="https://zedunknown.github.io/ChatGPT-Utils/docs/%s" version="%s" />\n' "${{ steps.set_filenames.outputs.CRX_FILENAME }}" "${{ steps.set_filenames.outputs.VERSION }}" >> docs/update.xml
+          printf '  </app>\n' >> docs/update.xml
+          printf '</gupdate>\n' >> docs/update.xml
+          
+        env: # Setting the actual ID via an environment variable is cleaner for XML generation
+          EXTENSION_ID: neojikhlkcommekalkmemddhnfflkgln # <<< Set your actual Extension ID here
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4 # Updated to v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          # GitHub Pages source is 'main' branch and '/docs' folder,
+          # remove 'publish_branch' to let it default to 'gh-pages',
+          # OR ensure your GH Pages is set to use the 'gh-pages' branch.
+          # If you truly want to publish directly to 'main' branch, keep this,
+          # but be aware it might overwrite commits if not handled carefully.
+          # publish_branch: main # Keep this if GH Pages is configured to serve from 'main' branch
+
+      - name: Zip extension source for release asset
+        run: |
+          cd src
+          zip -r ../${{ steps.set_filenames.outputs.ZIP_FILENAME }} .
+        # Ensure the ZIP file is created in the root directory for later attachment
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2 # Updated to v2
+        with:
+          files: |
+            docs/${{ steps.set_filenames.outputs.CRX_FILENAME }} # Corrected path to CRX
+            ${{ steps.set_filenames.outputs.ZIP_FILENAME }}       # Zip file in root
+            docs/update.xml                                     # Corrected path to update.xml
+          # Optionally add a release name, if not using the tag name directly
+          name: "Release ${{ steps.set_filenames.outputs.VERSION }}"
