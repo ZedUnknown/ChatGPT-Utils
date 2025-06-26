@@ -33,7 +33,12 @@
                 "libs/*.js",
                 "utils/tokenCounter.js"
             ],
-            "matches": ["<all_urls>"]
+            "matches": [
+                "https://chat.openai.com/*",
+                "http://chat.openai.com/*",
+                "https://chatgpt.com/*",
+                "http://chatgpt.com/*"
+            ]
         }
     ],
     "icons": {
