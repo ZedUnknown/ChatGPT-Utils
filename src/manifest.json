@@ -4,7 +4,7 @@
     "version": "1.0.0",
     "author": "Zed Unknown",
     "description": "Various Utilities for ChatGPT",
-    "permissions": ["scripting", "activeTab", "webNavigation"],
+    "permissions": ["scripting", "activeTab"],
     "host_permissions": [
         "https://chat.openai.com/*",
         "http://chat.openai.com/*",

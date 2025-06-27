@@ -1,5 +1,5 @@
 // ===[Constants]===
-const DEBUG = false;
+const DEBUG = true;
 const PREFIX = 'Token Counter |';
 
 let bottomContainer = document.getElementById("thread-bottom");
