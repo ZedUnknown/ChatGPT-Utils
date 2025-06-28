@@ -10,7 +10,7 @@
 ## 🚀 Features
 
 ✅ **Token Counter**  
-Easily view how many tokens your selected text will consume. Ideal for free & paid users to keep track of token limits in real-time.
+Easily view how many tokens your selected text will consume. Ideal for free & paid users to keep an eye on token counts.
 
 - Works directly on the page
 - Powered by OpenAI-compatible tokenizers (`o200k` and `cl100k` support)
@@ -45,11 +45,13 @@ Click the "Load unpacked" button (usually in the top-left corner after enabling 
 
 The current version only includes the **Token Counter**, but more utilities and functions are coming soon:
 
-- ✨ Automatic Update System (`.crx` and `.update.xml` | <-- prioritize)
-- 📄 Chat Exporter
-- 📊 Token Budgeting per Model
+- Automatic Update System - Currently, the `update_url` key has been restricted in many browsers, making this feature only available via the Chrome Web Store.
+- 🎰 Token Tracker
 - 🎫 Multi-token Counters
-- 💡 Context Preview Tool
+- 📄 Chat Exporter
+- 📂 Chat Organizer
+- 📊 Token Budgeting per Model
+- 💡 Context Preview
 - 🧩 Utility Selection UI
 - 🛠️ and many more...
 
