@@ -46,7 +46,9 @@ Click the "Load unpacked" button (usually in the top-left corner after enabling 
 The current version only includes the **Token Counter**, but more utilities and functions are coming soon:
 
 - Automatic Update System - Currently, the `update_url` key has been restricted in many browsers, making this feature only available via the Chrome Web Store.
+
 &nbsp;
+
 - **Token Tracker**
 - **Multi-token Counters**
 - **Chat Exporter**
