@@ -23,21 +23,26 @@ Easily view how many tokens your selected text will consume. Ideal for free & pa
 
 &nbsp;
 
+Here are a few improved versions of your installation guide, focusing on clarity, conciseness, and user-friendliness.
+
+---
 ## 📦 Installation
 
-1. **Clone or download this repository:**
-Extract the downloaded `.zip` to a new folder.
+### From the Chrome Web Store
 
-2. **Open your browser's Extensions page:** 
-Type your_browser://extensions/ into your address bar and press Enter.
-   - **For Chrome:** Replace `your_browser` in with `chrome`.
-   - **For Opera or Opera GX:** Replace `your_browser` with `opera`.
+1.  Head over to the **[ChatGPT Utils page](https://chromewebstore.google.com/detail/jblbnhicpaildkkbfojidfckanofaaen?utm_source=item-share-cb)** on the Chrome Web Store.
+2.  Click **"Install"**. You're all set! The extension will automatically update in the future.
 
-3. **Enable Developer Mode:** 
-In the top-right corner (in chrome) or somewhere on the extensions page, try to locate and toggle on `"Developer mode"`.
+### Manual Installation
 
-4. **Load the unpacked extension:** 
-Click the "Load unpacked" button (usually in the top-left corner after enabling developer mode). Then, navigate to and select the folder of the extracted from step 1.
+1.  **Get the code:**
+    * **Clone** the repository, or
+    * **Download** the `.zip` file and extract it to a new folder.
+2.  **Open Extensions:** Type `chrome://extensions/` (for Chrome) or `opera://extensions/` (for Opera/Opera GX) into your browser's address bar and hit Enter.
+3.  **Enable Developer Mode:** Find and toggle on **"Developer mode"** (usually in the top-right corner).
+4.  **Load Extension:** Click **"Load unpacked"** and select the folder you extracted in step 1.
+
+**Note:** _This extension does not support Firefox or Safari._
 
 &nbsp;
 
@@ -45,9 +50,7 @@ Click the "Load unpacked" button (usually in the top-left corner after enabling 
 
 The current version only includes the **Token Counter**, but more utilities and functions are coming soon:
 
-- Automatic Update System - Currently, the `update_url` key has been restricted in many browsers, making this feature only available via the Chrome Web Store.
-
-&nbsp;
+- **Automatic Update System** - The `update_url` key has been restricted in many browsers, making this feature only available via the Chrome Web Store.
 
 - **Token Tracker**
 - **Multi-token Counters**
