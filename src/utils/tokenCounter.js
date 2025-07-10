@@ -10,8 +10,6 @@ const tokenCounterContainerClass_Dark = 'bg-token-bg-primary.flex.w-full.cursor-
 const tokenCounterContainerClass_Light = 'bg-token-bg-primary.flex.w-full.cursor-text.flex-col.items-center.justify-center.overflow-clip.bg-clip-padding.contain-inline-size.dark\\:bg-\\[\\#303030\\].shadow-short.rounded-\\[28px\\]';
 
 const tokenCounterContainer_UID = 'bg-token-bg-primary';
-
-
 const tokenCounter = document.createElement('div');
 
 // global names of tokenizers
@@ -55,13 +53,12 @@ const theme = {
 };
 
 // IDs of newly added elements
-const tokenCounterID = 'util-tokenCounter';
-const tokenCounterContainerID = 'util-tokenCounterContainer'; // added as a class to prevent id clashes
+const newTokenCounter_ID = 'util-tokenCounter';
+const newTokenCounterContainer_ID = 'util-tokenCounterContainer'; // added as a class to prevent id clashes
 
 // ===[Memory Variables]===
 // * Under development *
 let currentTokenizer = tokenizers[0]; // Set default
-
 
 window.addEventListener('load', () => {
 	requestIdleCallback(() => {
@@ -92,66 +89,57 @@ function checkLibraries() {
 	}, 800);
 }
 
+// ===[Initialization]===
 function main() {
-	let _containerFound = false;
 	const tryCreate = setInterval(() => {
-		if (DEBUG) console.log(`${PREFIX} Attempting to locate the user typing box or area...`);
 
-		// check if tokenCounterContainer exists
-		if (!document.getElementById(tokenCounterContainerID)) {
+		tokenCounterContainer = findTokenCounterContainer();
 
-			// attempt to locate the container by UID class name: bg-token-bg-primary
-			if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was not found. Attempting to locate it by UID class...`);
-			tokenCounterContainer = bottomContainer.querySelectorAll('.bg-token-bg-primary')[0];
-
-			// attempt to locate the container by structure of the bottomContainer
-			if (!tokenCounterContainer) {
-				if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was not found. Proceeding with path guessing...`);
-
-				// possible paths
-				let paths = [
-					[0, 0, 1, 1, 0],
-					[0, 0, 1, 1, 1]
-				];
-
-				// iterate through possible paths and passing the paths to get each child via the findIt() function
-				for (let path of paths) {
-					tokenCounterContainer = findIt(bottomContainer, path);
-					console.log(tokenCounterContainer);
-					if (tokenCounterContainer.classList.contains(tokenCounterContainer_UID)) {
-						_containerFound = true;
-						if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was found by path guessing...`);
-						break;
-					}
-				}
-
-				if (!tokenCounterContainer) {
-					// * Under Development *
-					// take main HTML as the container
-					console.warn(`${PREFIX} The bottomContainer could not be found by structure or class names.`);
-					clearInterval(tryCreate);
-					return;
-				}
-
-			} else {
-				if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was found by UID class...`);
-				_containerFound = true;
-			}
-
-		} else {
-			tokenCounterContainer = document.getElementById(tokenCounterContainerID);
-			_containerFound = true;
-		}
-		
-		if (_containerFound) {
+		if (tokenCounterContainer) {
 			clearInterval(tryCreate);
 			if (DEBUG) console.log(`${PREFIX} The bottom container was successfully located: ${tokenCounterContainer}`);
-	
+			
 			setTimeout(() => setUp(), 100);
+
+		} else {
+			if (DEBUG) console.log(`${PREFIX} The bottom container not found yet, retrying...`);
 		}
 
-
 	}, 800);
+}
+
+// find the bottom container to add the token counter element
+function findTokenCounterContainer() {
+	// 1. attempt to locate the container by assigned custom ID: bg-token-bg-primary (if already exists)
+	let container = document.getElementById(newTokenCounterContainer_ID);
+	if (container) {
+		if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer already exists...`);
+		return container;
+	}
+
+	// 2. attempt to locate the container by UID class name: bg-token-bg-primary)
+	if (DEBUG) console.log(`${PREFIX} Attempting to locate the tokenCounterContainer by UID class...`);
+	container = bottomContainer.querySelectorAll('.bg-token-bg-primary')[0];
+	if (container) {
+		if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was found by UID class...`);
+		return container;
+	}
+
+	// 3. attempt to locate the container by structure of the bottomContainer
+	if (DEBUG) console.log(`${PREFIX} Attempting to locate the tokenCounterContainer by structure of the bottomContainer...`);
+	let paths = [
+		[0, 0, 1, 1, 0],
+		[0, 0, 1, 1, 1]
+	];
+
+	for (let path of paths) {
+		container = findIt(bottomContainer, path);
+		if (container.classList.contains(tokenCounterContainer_UID)) {
+			if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was found by path guessing...`);
+			return container;
+		}
+	}
+
 }
 
 // ===[Set Up]===
@@ -172,7 +160,7 @@ function setUp() {
 // ===[Create Token Counter]===
 function createTokenCounter() {
 	// update theme if exsits
-	if (document.getElementById(tokenCounterID)) {
+	if (document.getElementById(newTokenCounter_ID)) {
 		if (DEBUG) console.log(`${PREFIX} Updating the token counter theme to: ${currentTheme}.`);
 		tokenCounter.style.backgroundColor = theme[currentTheme]['bgToken'];
 		tokenCounter.style.color = theme[currentTheme]['colorToken'];
@@ -182,11 +170,11 @@ function createTokenCounter() {
 		// try.!.!.!. to create the token counter
 		const tryCreate = setInterval(() => {
 			if (DEBUG) console.log(`${PREFIX} Attempting to create the token counter...`);
-			if (!document.getElementById(tokenCounterID)) {
+			if (!document.getElementById(newTokenCounter_ID)) {
 				clearInterval(tryCreate);
 				if (DEBUG) console.log(`${PREFIX} The token counter has been created successfully.`);
 				if (DEBUG) console.log(`${PREFIX} Inserting the token counter into: ${tokenCounterContainer}`);
-				tokenCounter.id = tokenCounterID;
+				tokenCounter.id = newTokenCounter_ID;
 				tokenCounter.style.display = 'none';
 				tokenCounter.style.position = 'absolute';
 				tokenCounter.style.top = '-2.5rem';
@@ -277,7 +265,7 @@ function fixUI(callback) {
 		tokenCounterContainer.classList.remove('overflow-clip');
 		tokenCounterContainer.style.overflow = 'visible';
 		tokenCounterContainer.style.position = 'relative';
-		tokenCounterContainer.id = tokenCounterContainerID;
+		tokenCounterContainer.id = newTokenCounterContainer_ID;
 		if (DEBUG) console.log(`${PREFIX} The user interface elements have been fixed.`);
 		callback();
 	} else {
