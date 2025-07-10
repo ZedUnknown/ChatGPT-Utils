@@ -1,5 +1,5 @@
 // ===[Constants]===
-const DEBUG = false;
+const DEBUG = true;
 const PREFIX = 'Token Counter |';
 
 let bottomContainer = document.getElementById("thread-bottom");
@@ -8,6 +8,9 @@ let tokenCounterContainer;
 // seems like they are the same (container = User Typing Box / area)
 const tokenCounterContainerClass_Dark = 'bg-token-bg-primary.flex.w-full.cursor-text.flex-col.items-center.justify-center.overflow-clip.bg-clip-padding.contain-inline-size.dark\\:bg-\\[\\#303030\\].shadow-short.rounded-\\[28px\\]';
 const tokenCounterContainerClass_Light = 'bg-token-bg-primary.flex.w-full.cursor-text.flex-col.items-center.justify-center.overflow-clip.bg-clip-padding.contain-inline-size.dark\\:bg-\\[\\#303030\\].shadow-short.rounded-\\[28px\\]';
+
+const tokenCounterContainer_UID = 'bg-token-bg-primary';
+
 
 const tokenCounter = document.createElement('div');
 
@@ -90,21 +93,37 @@ function checkLibraries() {
 }
 
 function main() {
+	let _containerFound = false;
 	const tryCreate = setInterval(() => {
 		if (DEBUG) console.log(`${PREFIX} Attempting to locate the user typing box or area...`);
 
 		// check if tokenCounterContainer exists
 		if (!document.getElementById(tokenCounterContainerID)) {
-			if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was not found. Attempting to locate it by class names...`);
-			tokenCounterContainer = document.getElementsByClassName(tokenCounterContainerClass_Dark)[0] || document.getElementsByClassName(tokenCounterContainerClass_Light)[0];
-			if (DEBUG) console.log(`${PREFIX} tokenCounterContainer: ${tokenCounterContainer}`);
+
+			// attempt to locate the container by UID class name: bg-token-bg-primary
+			if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was not found. Attempting to locate it by UID class...`);
+			tokenCounterContainer = bottomContainer.querySelectorAll('.bg-token-bg-primary')[0];
+
+			// attempt to locate the container by structure of the bottomContainer
 			if (!tokenCounterContainer) {
-				if (DEBUG) console.log(`${PREFIX} Proceeding with path guessing...`);
+				if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was not found. Proceeding with path guessing...`);
+
+				// possible paths
 				let paths = [
 					[0, 0, 1, 1, 0],
-					[0, 0, 1, 0, 0]
+					[0, 0, 1, 1, 1]
 				];
-				tokenCounterContainer = findIt(bottomContainer, paths);
+
+				// iterate through possible paths and passing the paths to get each child via the findIt() function
+				for (let path of paths) {
+					tokenCounterContainer = findIt(bottomContainer, path);
+					console.log(tokenCounterContainer);
+					if (tokenCounterContainer.classList.contains(tokenCounterContainer_UID)) {
+						_containerFound = true;
+						if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was found by path guessing...`);
+						break;
+					}
+				}
 
 				if (!tokenCounterContainer) {
 					// * Under Development *
@@ -113,15 +132,24 @@ function main() {
 					clearInterval(tryCreate);
 					return;
 				}
+
+			} else {
+				if (DEBUG) console.log(`${PREFIX} The tokenCounterContainer was found by UID class...`);
+				_containerFound = true;
 			}
+
 		} else {
 			tokenCounterContainer = document.getElementById(tokenCounterContainerID);
+			_containerFound = true;
+		}
+		
+		if (_containerFound) {
+			clearInterval(tryCreate);
+			if (DEBUG) console.log(`${PREFIX} The bottom container was successfully located: ${tokenCounterContainer}`);
+	
+			setTimeout(() => setUp(), 100);
 		}
 
-		clearInterval(tryCreate);
-		if (DEBUG) console.log(`${PREFIX} The bottom container was successfully located: ${tokenCounterContainer}`);
-
-		setTimeout(() => setUp(), 100);
 
 	}, 800);
 }
@@ -313,24 +341,22 @@ function resetVariables() {
 }
 
 // child based path finding
-function findIt(parent, paths) {
-	if (!parent || !paths) return null;
+function findIt(parent, path) {
+	if (!parent || !path) return null;
 
-	for (const path of paths) {
-		let node = parent;
-		let _valid = true;
+	let node = parent;
+	let _valid = true;
 
-		for (const index of path) {
-			if (node && node.children && node.children[index]) {
-				node = node.children[index];
-			} else {
-				_valid = false;
-				break;
-			}
+	for (const index of path) {
+		if (node && node.children && node.children[index]) {
+			node = node.children[index];
+		} else {
+			_valid = false;
+			break;
 		}
-
-		if (_valid && node) return node;
 	}
+
+	if (_valid && node) return node;
 	return null;
 }
 
