@@ -492,10 +492,7 @@ function createOverlay() {
     <div class="footer">
         <p style="margin: 0;">
             More 
-            <a class="gpt-utils-link" style="color: #ffffff; cursor: pointer; text-decoration: underline; transition: color 0.2s ease-in-out;" href="https://github.com/ZedUnknown/ChatGPT-Utils">
-                features and updates
-            </a>
-            are coming soon!
+            <a class="gpt-utils-link" style="color: #ffffff; cursor: pointer; text-decoration: underline; transition: color 0.2s ease-in-out;" href="https://github.com/ZedUnknown/ChatGPT-Utils">features and updates</a> are coming soon!
         </p>
     </div>
     `;
