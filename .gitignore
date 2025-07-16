@@ -9,17 +9,11 @@
 *.pem
 *.py
 
-# Under Development Files
-helper.js
-tokenTracker.js
-
+# Dev Files
 overlay.html
 
-
-
-
-
-
+# Under Development Files
+tokenTracker.js
 
 # -----------------------------------------------------------------------------------------------------------
 
