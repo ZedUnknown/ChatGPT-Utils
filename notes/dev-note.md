@@ -57,7 +57,7 @@ Before pushing any tags to trigger the workflow, you **MUST manually generate th
 
 #### 2. Triggering a New Release
 
-Once the `.crx` file is manually generated and placed in `docs/` with the correct ID, commit these changes and then create and push an annotated Git tag to your repository. The tag name should follow a semantic versioning pattern (e.g., `v1.0.0`, `v1.1.2`).
+Once the `.crx` file is manually generated and placed in `docs/` with the correct ID, commit these changes and then create and push an annotated Git tag to your repository. The tag name should follow a increment versioning pattern (e.g., `v1.0.0`, `v1.1.2`).
 
 ```bash
 git add docs/ChatGPT-Utils-v1.0.0.crx          # Add the new .crx file to staging
