@@ -1,6 +1,6 @@
 (function() {
 // ===[Constants]===
-const DEBUG = true;
+const DEBUG = false;
 const PREFIX = 'Overlay |';
 const overlayID = "GPT-Utils-Overlay";
 

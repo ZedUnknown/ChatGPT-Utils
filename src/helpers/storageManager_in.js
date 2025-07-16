@@ -2,7 +2,7 @@
 // communicates with storageManager_out.js
 
 // the event listener below is in real-time and concurrently fires with `chrome.storage.onChanged` in storageManager_out.js
-const DEBUG = true;
+const DEBUG = false;
 const PREFIX = 'Storage Manager_in |';
 
 window.addEventListener("message", (e) => {

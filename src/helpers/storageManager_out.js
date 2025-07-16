@@ -1,6 +1,6 @@
 // use for storage API inside the chrome.runtime (can access main window since this is a content script)
 // communicates with storageManager_in.js
-const DEBUG = true;
+const DEBUG = false;
 const PREFIX = 'Storage Manager_out |';
 
 window.addEventListener("message", async (e) => {
