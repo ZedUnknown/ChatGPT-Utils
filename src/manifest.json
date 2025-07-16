@@ -1,10 +1,10 @@
 {
     "manifest_version": 3,
     "name": "ChatGPT-Utils",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "author": "Zed Unknown",
     "description": "Various Utilities for ChatGPT",
-    "permissions": ["scripting", "activeTab"],
+    "permissions": ["scripting", "activeTab", "storage"],
     "host_permissions": [
         "https://chat.openai.com/*",
         "http://chat.openai.com/*",
@@ -23,7 +23,11 @@
                 "https://chatgpt.com/*",
                 "http://chatgpt.com/*"
             ],
-            "js": ["main.js"],
+            "js": [
+                "main.js",
+                "overlay.js",
+                "./helpers/storageManager_out.js"
+            ],
             "run_at": "document_end"
         }
     ],
@@ -31,6 +35,7 @@
         {
             "resources": [
                 "libs/*.js",
+                "helpers/*.js",
                 "utils/tokenCounter.js"
             ],
             "matches": [

@@ -22,7 +22,7 @@ let tokenizer;
 let detectTheme;
 let currentTheme;
 
-// event listeners bookkeeping
+// event listeners bookkeeping (flag to prevent adding the selection listener multiple times)
 let selectionListenerAdded = false;
 
 const theme = {
@@ -57,9 +57,11 @@ const newTokenCounter_ID = 'util-tokenCounter';
 const newTokenCounterContainer_ID = 'util-tokenCounterContainer'; // added as a class to prevent id clashes
 
 // ===[Memory Variables]===
-// * Under development *
-let currentTokenizer = tokenizers[0]; // Set default
+let ENABLED = true; // controlled by the 'utilsStateUpdated' event from config
+// * under development *
+let currentTokenizer = tokenizers[0]; // set default tokenizer
 
+// ===[Important Event Listeners]===
 window.addEventListener('load', () => {
 	requestIdleCallback(() => {
 
@@ -69,6 +71,25 @@ window.addEventListener('load', () => {
 	});
 });
 
+// custom event from storageManager_in, linked to 'chrome.storage.onChanged'
+// enabled or disabled ?
+document.addEventListener('utilsStateUpdated', (e) => {
+	const config = e.detail;
+
+	if (config?.overlayStates?.checkBoxTokenCounter !== undefined) {
+		// for safety it uses the global updated config if the passed one gives unexpected values
+		ENABLED = config.overlayStates.checkBoxTokenCounter || window.config.overlayStates.checkBoxTokenCounter;
+		if (DEBUG) console.log(`${PREFIX} ${ENABLED ? 'Enabled' : 'Disabled'}`);
+
+		if (!ENABLED) {
+			toggleTokenCounter(true); // hide
+		}
+	} else {
+		console.warn(`${PREFIX} State was not found in config...`);
+	}
+});
+
+// checks for tokenizer libraries
 function checkLibraries() {
 	const checkLibraries = setInterval(() => {
 		if (DEBUG) console.log(`${PREFIX} Checking for the required tokenizer libraries...`);
@@ -84,6 +105,7 @@ function checkLibraries() {
 			// get current theme & theme setup
 			setupThemeObserver();
 
+			// fire-up the main!
 			setTimeout(main, 50);
 		}
 	}, 800);
@@ -91,8 +113,8 @@ function checkLibraries() {
 
 // ===[Initialization]===
 function main() {
+	// find the container and set it up!
 	const tryCreate = setInterval(() => {
-
 		tokenCounterContainer = findTokenCounterContainer();
 
 		if (tokenCounterContainer) {
@@ -109,6 +131,8 @@ function main() {
 }
 
 // find the bottom container to add the token counter element
+// this function may change over time since it require constant adaptation to the
+// changes made to the UI by Oppenheimer, *cough OpenAI
 function findTokenCounterContainer() {
 	// 1. attempt to locate the container by assigned custom ID: bg-token-bg-primary (if already exists)
 	let container = document.getElementById(newTokenCounterContainer_ID);
@@ -139,7 +163,6 @@ function findTokenCounterContainer() {
 			return container;
 		}
 	}
-
 }
 
 // ===[Set Up]===
@@ -147,11 +170,13 @@ function setUp() {
 	if (DEBUG) console.log(`${PREFIX} Setting up the token counter...`);
 	fixUI(createTokenCounter); // create after UI is fixed
 
-	// only add the event listener once
+	// ensure the selection listener is added only once
 	if (!selectionListenerAdded) {
 		document.addEventListener('selectionchange', () => {
-			// if (DEBUG) console.log(`${PREFIX} The selection has changed.`);
-			checkSelection();
+			if (ENABLED) {
+				if (DEBUG) console.log(`${PREFIX} The selection has changed.`);
+				checkSelection();
+			}
 		});
 		selectionListenerAdded = true;
 	}
@@ -159,7 +184,7 @@ function setUp() {
 
 // ===[Create Token Counter]===
 function createTokenCounter() {
-	// update theme if exsits
+	// update theme if exists
 	if (document.getElementById(newTokenCounter_ID)) {
 		if (DEBUG) console.log(`${PREFIX} Updating the token counter theme to: ${currentTheme}.`);
 		tokenCounter.style.backgroundColor = theme[currentTheme]['bgToken'];
@@ -167,7 +192,7 @@ function createTokenCounter() {
 		tokenCounter.style.boxShadow = theme[currentTheme]['boxShadow'];
 		return;
 	} else {
-		// try.!.!.!. to create the token counter
+		// try..!!! to create the token counter
 		const tryCreate = setInterval(() => {
 			if (DEBUG) console.log(`${PREFIX} Attempting to create the token counter...`);
 			if (!document.getElementById(newTokenCounter_ID)) {
@@ -205,7 +230,7 @@ function createTokenCounter() {
 
 // ===[Token Counter]===
 function countTokens(text, tokenizerType) {
-	// * Under Development *
+	// * under development *: future support for selecting tokenizerType
 	// if (tokenizerType) setTokenizer(tokenizerType);
 	if (DEBUG) console.log(`${PREFIX} Text to be tokenized: ${text}`);
 	if (text) {
@@ -219,6 +244,7 @@ function showTokenCount(tokens) {
 	const thresholds = theme[currentTheme]['thresholds'];
 	let color = thresholds['low'][1]; // default
 
+	// applying color based on thresholds
 	if (tokens.length >= thresholds['super'][0]) {
 		color = thresholds['super'][1];
 	} else if (tokens.length >= thresholds['extreme'][0]) {
@@ -232,13 +258,11 @@ function showTokenCount(tokens) {
 	}
 
 	tokenCounter.innerHTML = `Token count: <span style="color: ${color}">${tokens.length}</span>`;
-	tokenCounter.style.display = 'block';
-
-	// [container specific fixes]: when showing token counter
-	tokenCounterContainer.style.borderRadius = '28px 0px 28px 28px';
+	toggleTokenCounter(); // show
 }
 
-// * Under development *
+// * under development *
+// sets the active tokenizer
 function setTokenizer(name) {
 	if (tokenizers.includes(name)) {
 		currentTokenizer = name;
@@ -255,8 +279,7 @@ function updateTheme() {
 }
 
 // ===[Little Helpers]===
-// this function may change over time since it require constant adaptation to the
-// changes made to the UI by Oppenheimer, *caugh OpenAI
+// fix the tokenCounterContainer
 function fixUI(callback) {
 	if (DEBUG) console.log(`${PREFIX} Fixing the user interface elements...`);
 	if (tokenCounterContainer) {
@@ -273,20 +296,21 @@ function fixUI(callback) {
 	}
 }
 
+function toggleTokenCounter(hide) {
+	tokenCounter.style.display = hide ? 'none' : 'block';
+	
+	// container specific fixes: adjust border radius based on visibility
+	// since the function is added to an event listener it get fired even when tokenCounterContainer is not available (during a page loading)
+	// where it gives an error of `Uncaught TypeError: Cannot read properties of undefined (reading 'style')`
+	if (tokenCounterContainer) {
+		tokenCounterContainer.style.borderRadius = hide ? '28px 28px 28px 28px' : '28px 0px 28px 28px';
+	}
+}
 // check if text is still selected
 function checkSelection() {
 	const currentSelection = window.getSelection().toString();
 	if (!currentSelection) {
-		tokenCounter.style.display = 'none';
-
-		// [container specific fixes]: when not showing token counter
-
-		// since the function is added to an event listener
-		// it get fired even when tokenCounterContainer is not available (during a page loading)
-		// where it gives an error of `Uncaught TypeError: Cannot read properties of undefined (reading 'style')`
-		if (tokenCounterContainer) {
-			tokenCounterContainer.style.borderRadius = '28px 28px 28px 28px';
-		}
+		toggleTokenCounter(true); // hide
 	} else {
 		countTokens(currentSelection);
 	}
@@ -303,7 +327,7 @@ function setupThemeObserver() {
 	});
 }
 
-// remove added elements
+// removes added elements
 function removeAddedElements() {
 	if (DEBUG) console.log(`${PREFIX} Removing the added elements...`);
 	const elementIDs = ['tokenCounter', 'tokenCounterContainer'];
@@ -319,16 +343,17 @@ function removeAddedElements() {
 				if (DEBUG) console.log(`${PREFIX} The element has been removed: ${id}.`);
 			}
 		}
-	})
+	});
 }
 
+// resets variables and element references
 function resetVariables() {
 	// reset containers and variables if needed
 	bottomContainer = document.getElementById("thread-bottom");
 	tokenCounterContainer = undefined;
 }
 
-// child based path finding
+// utility function for child based path finder
 function findIt(parent, path) {
 	if (!parent || !path) return null;
 
@@ -358,12 +383,12 @@ function observePageChange() {
 			if (DEBUG) console.log(`${PREFIX} The page has changed from ${lastUrl} to ${currentUrl}.`);
 
 			// ignore specific in-window URLs
-			const ignoreUrls = ['settings', 'pricing']
+			const ignoreUrls = ['settings', 'pricing'];
 			const hash = currentUrl.split('#')[1];
 			if (hash && ignoreUrls.includes(hash)) {
 				if (DEBUG) console.log(`${PREFIX} The URL has been ignored.`);
 				return;
-			};
+			}
 
 			lastUrl = currentUrl;
 
@@ -384,9 +409,10 @@ function observePageChange() {
 		subtree: true,
 		childList: true
 	});
-};
+}
 
-// observe class changes on a given element and run a callback
+// observes changes to the 'class' attribute of a given element
+// use for detecting theme changes on the html tag
 function observeClassChange(element, callback) {
 	const observer = new MutationObserver(mutations => {
 		mutations.forEach(mutation => {
