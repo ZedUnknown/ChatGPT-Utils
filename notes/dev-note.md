@@ -112,7 +112,7 @@ This setup makes the `update.xml` file accessible at a predictable URL, which Ch
 -----
 &nbsp;
 
-### Chrome Auto-Update
+### Chrome Auto-Update (Just to Read)
 
 Chrome's auto-update work when the `update.xml` updated to a new version and file must precisely match the extension's details:
 
@@ -136,7 +136,7 @@ Chrome's auto-update work when the `update.xml` updated to a new version and fil
 -----
 &nbsp;
 
-### Workflow Adjustment (Refined `release.yml`)
+### Workflow Adjustment (Refined `release.yml`) (Just to Read)
 
 Based on this, you'll need to remove the CRX building steps from your workflow and potentially add a check for the file's existence.
 
