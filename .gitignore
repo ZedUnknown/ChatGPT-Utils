@@ -9,9 +9,6 @@
 *.pem
 *.py
 
-# Dev Files
-overlay.html
-
 # Under Development Files
 tokenTracker.js
 
