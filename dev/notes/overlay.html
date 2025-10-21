@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./owui-widget.css">
+    <title>Overlay</title>
+
+    <style>
+    /* RESET CSS */
+    :host {
+        all: initial;
+        font-family: system-ui, sans-serif;
+    }
+
+    :root {
+        /* 1. Use a more-intuitive box-sizing model */
+        box-sizing: border-box;
+        /* 2. Remove default margin */
+        margin: 0;
+        /* 3. Add accessible line-height */
+        line-height: 1.5;
+        /* 4. Improve text rendering */
+        -webkit-font-smoothing: antialiased;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: inherit;
+        font-family: quick-sand, sans-serif;
+    }
+
+    img,
+    picture,
+    video,
+    canvas,
+    svg {
+        /* 5. Improve media defaults */
+        display: block;
+        max-width: 100%;
+    }
+
+    input,
+    button,
+    textarea,
+    select {
+        /* 6. Inherit fonts for form controls */
+        font: inherit;
+    }
+
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        /* 7. Avoid text overflows */
+        overflow-wrap: break-word;
+    }
+
+    p {
+        /* 8. Improve line wrapping */
+        text-wrap: pretty;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        text-wrap: balance;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    ul,
+    li,
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    #root,
+    #__next {
+        isolation: isolate;
+    }
+    /* ====================== */
+
+    #GPT-UTILS-OVERLAY {
+        display: flex;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 9999999;
+        overflow: hidden;
+    }
+
+    /* ===[Main Container]=== */
+    /* 
+    .main-container {
+        --color-text: #ffffff;
+        --color-bg: #191919;
+        --color-border: #424242
+    } */
+
+    /* .main-container.dark {
+        --color-text: #ffffff;
+        --color-bg: #191919;
+        --color-border: #424242
+    }
+
+    .main-container.light {
+        --color-text: #000000;
+        --color-bg: #ffffff;
+        --color-border: #191919
+    } */
+
+    .main-container {
+        display: flex;
+        flex-direction: row;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        background-color: #181818;
+        color: #ffffff;
+    }
+
+    /* ===[Sidebar]=== */
+    #sidebar {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        background-color: #151515;
+        color: #ffffff;
+        border: 1px solid #242424;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        overflow: hidden;
+        width: 220px;
+        min-width: 220px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 10%;
+        padding: 1rem;
+        background-color: none;
+        border-bottom: 1px solid #242424;
+    }
+
+    #sidebar-logo, 
+    #sidebar-toggle-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        border: none;
+        border-radius: 30%;
+        cursor: pointer;
+        background-color: transparent;
+    }
+
+    #sidebar-logo,
+    #sidebar-toggle-button {
+        color: #afafaf;
+    }
+
+    #sidebar-logo {
+        border: #383838 1px solid;
+        border-radius: 13px;
+    }
+
+    #sidebar-logo:hover, 
+    #sidebar-toggle-button:hover {
+        background-color: #3a3a3a;
+    }
+
+    #marker {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 3%; /* 3 selections */
+        background-color: #ffffff;
+        transform: translateY(17px);
+        border-radius: 0px 10px 10px 0px;
+        transition: transform 0.3s ease;
+    }
+
+    #sidebar-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+    }
+
+    #sidebar-section-1 {
+        display: flex;
+        position: relative;
+        flex-direction: column;
+        margin-top: 1rem;
+        width: 100%;
+        transition: all 0.3s ease-in-out;
+    }
+    
+    #sidebar-section-2 {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1rem;
+        width: 100%;
+        height: 70%;
+        background-color: transparent;
+    }
+
+    .tab {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 0.6rem;
+        margin: 0.3rem 0.5rem;
+        padding: 0.3rem 0.5rem;
+        cursor: pointer;
+        min-height: 2.25rem;
+        max-height: 3.25rem;
+        border-radius: 10px;
+        overflow: hidden; 
+        transition: gap 0.3s ease, padding 0.3s ease, background-color 0.2s ease;
+
+    }
+
+    .tab .label {
+        color: #ffffff;
+        font-size: 0.9rem;
+        font-weight: 500;
+        font-family: quicksand, sans-serif;
+        opacity: 1;
+        max-width: 120px;
+    }
+
+    .tab > .icon {
+        display: flex;
+        flex: 0 0 24px;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 50px;
+        color: #ffffff;
+    }
+
+    .tab:hover {
+        transition: all 0.2s ease-in-out;
+        background-color: #ffffff28;
+    }    
+
+    .tab.active,
+    .tab.active,
+    .tab.active {
+        background-color: #ffffff;
+    }
+
+    .tab.active > .label,
+    .tab.active > .label,
+    .tab.active > .label {
+        color: #000000 !important;
+    }
+
+    .tab.active > .icon,
+    .tab.active > .icon,
+    .tab.active > .icon {
+        color: #000000 !important;
+    }
+
+    .tab:hover > .label{
+        color: #ffffff !important;
+    }    
+
+    .tab.active:hover {
+        background-color: #ffffff !important;
+    }    
+    .tab.active:hover > .label{
+        color: #000000 !important;
+    }
+
+    /* ===[Sidebar Collapse]=== */
+    #sidebar.sidebar-collapsed {
+        width: 72px;
+        min-width: 72px; /* prevent collapse on resize */
+        background-color: #181818;
+    }
+
+    #sidebar.sidebar-collapsed #sidebar-logo {
+        width: 0;
+        opacity: 0;
+    }
+
+    #sidebar.sidebar-collapsed .tab {
+        padding-left: 1rem;
+        gap: 0;
+    }
+
+    .sidebar-collapsed .tab .label {
+        opacity: 0;
+        max-width: 0;
+    }
+
+    #sidebar-footer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 10%;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #sidebar #sidebar-footer .paypal-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #ffffff67;
+        width: 180px;
+        padding: 0.5rem;
+        border-radius: 5rem;
+        height: 2.5rem;
+        flex-wrap: nowrap;
+        overflow: hidden;
+        cursor: pointer;
+        transition: all 0.3s ease-in-out;
+    }
+
+    #sidebar #sidebar-footer .paypal-button > a,
+    #sidebar #sidebar-footer .paypal-button > a > span {
+        color: #000000;
+        font-size: 1rem;
+        font-weight: 800;
+        font-family: quicksand, sans-serif;
+        text-decoration: none;
+        white-space: nowrap;
+        animation: paypal-text 1s forwards;
+        opacity: 0;
+    }
+
+    #sidebar.sidebar-collapsed #sidebar-footer .paypal-button {
+        opacity: 0;
+        width: 0;
+    }
+
+    @keyframes paypal-text {
+        100% {
+            opacity: 1;
+        } 
+    }
+
+    /* ===[Content Container]=== */
+    .content-panel {
+        display: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        align-items: start;
+        gap: 2rem;
+        width: 100%;
+        padding: 1.5rem;
+        opacity: 0;
+        pointer-events: none;
+        top: -100vh;
+        transition: all 0.3s ease;
+    }
+
+    .content-panel.active {
+        opacity: 1;
+        top: 0;
+        display: flex;
+        pointer-events: all;
+        position: relative;
+    }
+
+    /* Dashboard Specific Styles */
+    .content-panel.active#ai-chat {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+    }
+
+    /* Hide footer in ai-chat panel */
+    #ai-chat.active ~ .footer {
+        display: none;
+    }
+
+    /* Utils Container */
+    fieldset {
+        flex-shrink: 0;
+        border: none;
+        border-radius: 1rem;
+        padding: 1rem;
+        scroll-margin: 1rem;
+        min-inline-size: min-content;
+        margin-inline: 2px;
+        padding-block: 0.35em 0.625em;
+        padding-inline: 1rem;
+        background-color: #2a2a2a;
+        box-shadow: #000000 0 .25rem .5rem -.25rem;
+        font-family: quicksand, sans-serif;
+        font-size: 1rem;
+        color: #ffffff;
+    }
+
+    fieldset > legend {
+        color: #ffffff;
+        font-size: 1.2rem;
+        font-weight: 600;
+        font-family: quicksand, sans-serif;
+        color: #ffffff;
+        background-color: #156797;
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+        border-radius: 8px 8px 8px 8px;
+        margin-bottom: 1rem;
+    }
+
+    .field-row {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    .indent {
+        margin-left: 24px;
+    }
+
+    .indent-2x {
+        margin-left: 48px;
+    }
+
+    .toggle-button {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        gap: 0.6rem;
+    }
+
+    .switch {
+        position: relative;
+        width: 40px;
+        height: 20px;
+        display: inline-block;
+        border-radius: 34px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgb(103, 103, 103);
+        border-radius: 34px;
+        transition: 0.2s ease-out;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 3px;
+        bottom: 2px;
+        background-color: white;
+        border-radius: 50%;
+        transition: 0.1s ease-out;
+    }
+
+    .switch > input:checked + .slider {
+        background-color: #0285ff;
+    }
+    .switch > input:checked + .slider:before {
+        transform: translateX(18px);
+    }
+
+    .dropdown-selection {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    select {
+        padding: 0.5rem;
+        border-radius: 5px;
+        border: none;
+        background-color: #555555;
+        color: #ffffff;
+        font-family: quicksand, sans-serif;
+        font-size: 1rem;
+        padding: 5px;
+        box-shadow: #00000085 0 .25rem .5rem -.25rem;
+        outline: none;
+    }
+
+    .options {
+        position: relative;
+    }
+    
+    /* disabled state */
+    .options.disabled::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background-color: #02020263;
+        border-radius: 5px;
+    }
+    
+    .options.disabled > * {
+        pointer-events: none;
+        user-select: none;
+        color: #858585;
+    }
+
+    #main-content {
+        position: relative;
+        width: 100%;
+    }
+
+    .footer {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        padding-bottom: 0.1rem;
+        color: #ffffff;
+        background: none;
+        width: 100%;
+    }
+
+    .footer .shine {
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 600;
+        font-family: "Poppins", sans-serif;
+        text-decoration: none;
+        white-space: nowrap;
+        background: linear-gradient(
+            to right,
+            #7c7c7c9f 0%,
+            #ffffff 10%,
+            #7c7c7c9f 20%
+        );
+        background-size: 500px;
+        background-position: 0;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -webkit-text-size-adjust: none;
+        animation: shine_animation 6s infinite linear;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes shine_animation {
+        0% {
+            background-position: 0;
+        }
+        100% {
+            background-position: 500px;
+        }
+    }
+
+    .gptutils-link {
+        color: #018DFF !important;
+        white-space: nowrap;
+        background: linear-gradient(
+            to right,
+            #018DFF 0%,
+            #ff003c 10%,
+            #018DFF 20%
+        );
+        background-size: 500px;
+        background-position: 0;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        -webkit-text-size-adjust: none;
+        animation: shine_animation 6s infinite linear;
+        animation-delay: 750ms;
+        animation-fill-mode: forwards;
+    }
+
+    /* coming soon */
+    .cm {
+        position: absolute;
+        font-family: quicksand, sans-serif;
+        font-size: 2rem;
+        font-weight: 800;
+        top: 30vh;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #ffffff;
+        background-color: #111111;
+        padding: 2rem;
+        border-radius: 24px;
+        outline: none;
+    }
+    </style>
+
+</head>
+<body>
+
+<div id="GPT-UTILS-OVERLAY" class="main-container">
+    <nav id="sidebar" class="sidebar-collapsed">
+        <div id="sidebar-header">
+            <button id="sidebar-logo">
+                <a target="_blank" style="cursor: pointer; text-decoration: underline;" href="https://github.com/ZedUnknown/ChatGPT-Utils">
+                    <svg width="30" height="30" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M 8.842 0 C 8.901 0.822 8.96 1.645 9.02 2.492 C 9.971 2.905 9.971 2.905 10.502 2.772 C 10.982 2.323 10.91 1.861 10.934 1.224 C 10.944 0.996 10.953 0.768 10.965 0.533 C 10.969 0.356 10.974 0.181 10.978 0 C 11.839 0.297 12.125 0.628 12.581 1.424 C 12.886 2.342 12.857 3.09 12.447 3.961 C 12.154 4.497 11.886 4.868 11.334 5.164 C 11.217 5.164 11.099 5.164 10.978 5.164 C 10.978 5.515 10.978 5.868 10.978 6.231 C 11.137 6.242 11.294 6.254 11.457 6.265 C 12.187 6.444 12.461 6.728 12.937 7.3 C 13.143 7.918 13.127 8.432 13.114 9.08 C 12.528 9.08 11.939 9.08 11.334 9.08 C 11.246 8.639 11.246 8.639 11.156 8.19 C 10.392 8.19 9.629 8.19 8.842 8.19 C 8.842 9.6 8.842 11.01 8.842 12.462 C 9.605 12.462 10.37 12.462 11.156 12.462 C 11.215 12.228 11.273 11.993 11.334 11.751 C 11.107 11.725 10.879 11.699 10.645 11.673 C 10.221 11.624 9.938 11.586 9.554 11.395 C 9.671 10.807 9.789 10.22 9.91 9.614 C 10.378 9.719 10.845 9.827 11.312 9.937 C 11.445 9.966 11.578 9.996 11.714 10.026 C 12.719 10.266 12.719 10.266 13.114 10.86 C 13.247 11.957 13.23 12.959 12.581 13.887 C 12.166 14.302 11.99 14.417 11.4 14.433 C 11.261 14.43 11.122 14.425 10.978 14.421 C 10.982 14.569 10.984 14.717 10.987 14.87 C 10.996 15.421 11.002 15.971 11.008 16.522 C 11.011 16.877 11.018 17.232 11.026 17.587 C 11.027 17.81 11.029 18.034 11.03 18.264 C 11.034 18.469 11.036 18.675 11.039 18.888 C 10.978 19.406 10.978 19.406 10.746 19.739 C 10.231 20.081 9.794 20.014 9.198 19.941 C 8.775 19.535 8.671 19.29 8.603 18.706 C 8.606 18.508 8.609 18.31 8.611 18.108 C 8.614 17.893 8.615 17.678 8.617 17.456 C 8.621 17.233 8.626 17.011 8.631 16.78 C 8.633 16.554 8.635 16.328 8.637 16.095 C 8.644 15.537 8.653 14.98 8.663 14.421 C 8.525 14.398 8.386 14.376 8.244 14.353 C 7.656 14.215 7.441 13.992 7.061 13.531 C 6.768 12.649 6.844 11.733 6.84 10.809 C 6.839 10.452 6.834 10.094 6.828 9.737 C 6.827 9.51 6.826 9.282 6.825 9.048 C 6.823 8.841 6.821 8.634 6.82 8.42 C 6.891 7.757 7.071 7.334 7.417 6.765 C 8.148 6.231 8.148 6.231 8.663 6.231 C 8.663 5.878 8.663 5.527 8.663 5.164 C 8.56 5.123 8.459 5.082 8.352 5.04 C 7.748 4.689 7.372 4.182 7.061 3.561 C 6.967 2.615 6.943 1.839 7.373 0.979 C 8.254 0 8.254 0 8.842 0 Z" fill="#FDFDFD" style="stroke-width: 1;"/>
+                    </svg>
+                </a>
+            </button>
+            <button id="sidebar-toggle-button">
+                <svg width="28" height="28" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6.83496 3.99992C6.38353 4.00411 6.01421 4.0122 5.69824 4.03801C5.31232 4.06954 5.03904 4.12266 4.82227 4.20012L4.62207 4.28606C4.18264 4.50996 3.81498 4.85035 3.55859 5.26848L3.45605 5.45207C3.33013 5.69922 3.25006 6.01354 3.20801 6.52824C3.16533 7.05065 3.16504 7.71885 3.16504 8.66301V11.3271C3.16504 12.2712 3.16533 12.9394 3.20801 13.4618C3.25006 13.9766 3.33013 14.2909 3.45605 14.538L3.55859 14.7216C3.81498 15.1397 4.18266 15.4801 4.62207 15.704L4.82227 15.79C5.03904 15.8674 5.31234 15.9205 5.69824 15.9521C6.01398 15.9779 6.383 15.986 6.83398 15.9902L6.83496 3.99992ZM18.165 11.3271C18.165 12.2493 18.1653 12.9811 18.1172 13.5702C18.0745 14.0924 17.9916 14.5472 17.8125 14.9648L17.7295 15.1415C17.394 15.8 16.8834 16.3511 16.2568 16.7353L15.9814 16.8896C15.5157 17.1268 15.0069 17.2285 14.4102 17.2773C13.821 17.3254 13.0893 17.3251 12.167 17.3251H7.83301C6.91071 17.3251 6.17898 17.3254 5.58984 17.2773C5.06757 17.2346 4.61294 17.1508 4.19531 16.9716L4.01855 16.8896C3.36014 16.5541 2.80898 16.0434 2.4248 15.4169L2.27051 15.1415C2.03328 14.6758 1.93158 14.167 1.88281 13.5702C1.83468 12.9811 1.83496 12.2493 1.83496 11.3271V8.66301C1.83496 7.74072 1.83468 7.00898 1.88281 6.41985C1.93157 5.82309 2.03329 5.31432 2.27051 4.84856L2.4248 4.57317C2.80898 3.94666 3.36012 3.436 4.01855 3.10051L4.19531 3.0175C4.61285 2.83843 5.06771 2.75548 5.58984 2.71281C6.17898 2.66468 6.91071 2.66496 7.83301 2.66496H12.167C13.0893 2.66496 13.821 2.66468 14.4102 2.71281C15.0069 2.76157 15.5157 2.86329 15.9814 3.10051L16.2568 3.25481C16.8833 3.63898 17.394 4.19012 17.7295 4.84856L17.8125 5.02531C17.9916 5.44285 18.0745 5.89771 18.1172 6.41985C18.1653 7.00898 18.165 7.74072 18.165 8.66301V11.3271ZM8.16406 15.995H12.167C13.1112 15.995 13.7794 15.9947 14.3018 15.9521C14.8164 15.91 15.1308 15.8299 15.3779 15.704L15.5615 15.6015C15.9797 15.3451 16.32 14.9774 16.5439 14.538L16.6299 14.3378C16.7074 14.121 16.7605 13.8478 16.792 13.4618C16.8347 12.9394 16.835 12.2712 16.835 11.3271V8.66301C16.835 7.71885 16.8347 7.05065 16.792 6.52824C16.7605 6.14232 16.7073 5.86904 16.6299 5.65227L16.5439 5.45207C16.32 5.01264 15.9796 4.64498 15.5615 4.3886L15.3779 4.28606C15.1308 4.16013 14.8165 4.08006 14.3018 4.03801C13.7794 3.99533 13.1112 3.99504 12.167 3.99504H8.16406C8.16407 3.99667 8.16504 3.99829 8.16504 3.99992L8.16406 15.995Z"></path>
+                </svg>
+            </button>
+        </div>
+        <div id="sidebar-body">
+            <div id="marker"></div>
+            <div id="sidebar-section-1">
+                <div class="tab" data-target="dashboard">
+                    <div class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7.94556 14.0276C7.9455 12.9375 7.06204 12.054 5.97192 12.054C4.88191 12.0541 3.99835 12.9376 3.99829 14.0276C3.99829 15.1177 4.88188 16.0011 5.97192 16.0012C7.06207 16.0012 7.94556 15.1177 7.94556 14.0276ZM7.94556 5.97192C7.94544 4.88187 7.062 3.99829 5.97192 3.99829C4.88195 3.99841 3.99841 4.88195 3.99829 5.97192C3.99829 7.062 4.88187 7.94544 5.97192 7.94556C7.06207 7.94556 7.94556 7.06207 7.94556 5.97192ZM16.0012 5.97192C16.0011 4.88187 15.1177 3.99829 14.0276 3.99829C12.9376 3.99835 12.0541 4.88191 12.054 5.97192C12.054 7.06204 12.9375 7.9455 14.0276 7.94556C15.1177 7.94556 16.0012 7.06207 16.0012 5.97192ZM9.27563 14.0276C9.27563 15.8523 7.79661 17.3313 5.97192 17.3313C4.14734 17.3312 2.66821 15.8522 2.66821 14.0276C2.66827 12.203 4.14737 10.724 5.97192 10.7239C7.79657 10.7239 9.27558 12.203 9.27563 14.0276ZM9.27563 5.97192C9.27563 7.79661 7.79661 9.27563 5.97192 9.27563C4.14734 9.27552 2.66821 7.79654 2.66821 5.97192C2.66833 4.14741 4.14741 2.66833 5.97192 2.66821C7.79654 2.66821 9.27552 4.14734 9.27563 5.97192ZM17.3313 5.97192C17.3313 7.79661 15.8523 9.27563 14.0276 9.27563C12.203 9.27558 10.7239 7.79658 10.7239 5.97192C10.724 4.14737 12.203 2.66827 14.0276 2.66821C15.8522 2.66821 17.3312 4.14734 17.3313 5.97192Z" fill="currentColor"></path>
+                            <path d="M8 12L12 8" stroke="currentColor" stroke-width="1.33"></path>
+                            <path d="M11.6665 13.7501H14.3748M17.0832 13.7501H14.3748M14.3748 13.7501V11.0417M14.3748 13.7501V16.4584" stroke="currentColor" stroke-width="1.33" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <div class="label">Dashboard</div>
+                </div>
+                <div class="tab active" data-target="utils">
+                    <div class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11.5171 11.9924C11.5171 11.1544 10.8375 10.4749 9.99951 10.4748C9.1614 10.4748 8.48194 11.1543 8.48194 11.9924C8.48204 12.8304 9.16146 13.51 9.99951 13.51C10.8375 13.5099 11.517 12.8304 11.5171 11.9924ZM3.80713 8.71018C3.28699 8.92666 3.01978 9.50634 3.19385 10.0422L3.52686 11.0647L3.56494 11.1653C3.77863 11.6537 4.32351 11.9188 4.84717 11.7717L7.30322 11.0803C7.68362 9.95526 8.74606 9.14475 9.99951 9.14475C10.6946 9.14479 11.3313 9.39406 11.8257 9.80783L13.0933 9.45139L13.0278 9.28049L11.7671 5.40061L3.80713 8.71018ZM14.5962 3.05783L14.4683 3.08615L13.6382 3.35569C13.0705 3.54027 12.7594 4.15025 12.9438 4.71799L14.2935 8.86936L14.3325 8.97287C14.5537 9.47408 15.1235 9.73664 15.6558 9.56369L16.4858 9.29319L16.605 9.24045C16.8285 9.11361 16.9562 8.86404 16.9272 8.60861L16.8999 8.48166L15.2808 3.49924C15.1844 3.20321 14.894 3.02422 14.5962 3.05783ZM12.8472 11.9924C12.8471 12.9213 12.3997 13.7432 11.7114 14.2629L13.6187 17.3137L13.6782 17.4348C13.7863 17.7246 13.6802 18.0603 13.4077 18.2307C13.1352 18.401 12.7869 18.3493 12.5737 18.1252L12.4907 18.0188L10.4761 14.7961C10.3209 14.8223 10.1621 14.84 9.99951 14.8401C9.83597 14.8401 9.67603 14.8226 9.52002 14.7961L7.50635 18.0188L7.42334 18.1252C7.21015 18.3493 6.86184 18.401 6.58936 18.2307C6.27803 18.036 6.1838 17.6251 6.37842 17.3137L8.28467 14.2619C7.72379 13.8376 7.32535 13.2124 7.19776 12.4914L5.20752 13.052C4.03967 13.3804 2.82407 12.7896 2.34717 11.7004L2.26221 11.4758L1.9292 10.4533C1.54076 9.25785 2.13665 7.9642 3.29737 7.48166L11.5884 4.03342C11.7179 3.15622 12.3266 2.38379 13.2271 2.09104L14.0581 1.82053L14.2524 1.76779C15.2307 1.5561 16.2295 2.11668 16.5454 3.08908L18.1646 8.07053L18.2173 8.26584C18.4145 9.17874 17.9401 10.1097 17.0855 10.4865L16.897 10.5588L16.0659 10.8283C15.3549 11.0592 14.6144 10.9419 14.0288 10.5705L12.6499 10.9572C12.7754 11.2783 12.8472 11.6269 12.8472 11.9924Z"></path>
+                        </svg>
+                    </div>
+                    <div class="label">Utils</div>
+                </div>
+                <div class="tab" data-target="themes">
+                    <div class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13.4941 10.1875C13.8503 10.2765 14.0673 10.638 13.9785 10.9941C13.4684 13.0346 11.4669 13.998 10 13.998C9.63273 13.998 9.33496 13.7003 9.33496 13.333C9.33513 12.9659 9.63283 12.668 10 12.668C11.0331 12.668 12.3652 11.9647 12.6885 10.6719C12.7776 10.3159 13.1381 10.0988 13.4941 10.1875Z"></path>
+                            <path d="M8.59668 6.3252C8.78558 6.01036 9.1939 5.90796 9.50879 6.09668C9.82338 6.28566 9.92597 6.694 9.7373 7.00879L7.99414 9.91406C7.9274 10.0261 8.00811 10.1688 8.13867 10.1689H9.16699L9.30078 10.1826C9.60373 10.2447 9.83203 10.5127 9.83203 10.834C9.83173 11.1551 9.60366 11.4234 9.30078 11.4854L9.16699 11.499H8.13867C6.97416 11.4989 6.25544 10.2281 6.85449 9.22949L8.59668 6.3252Z"></path><path d="M10 2.08496C14.3713 2.08496 17.915 5.62867 17.915 10C17.915 14.3713 14.3713 17.915 10 17.915C5.62867 17.915 2.08496 14.3713 2.08496 10C2.08496 5.62867 5.62867 2.08496 10 2.08496ZM10 3.41504C6.3632 3.41504 3.41504 6.3632 3.41504 10C3.41504 13.6368 6.3632 16.585 10 16.585C13.6368 16.585 16.585 13.6368 16.585 10C16.585 6.3632 13.6368 3.41504 10 3.41504Z"></path>
+                        </svg>
+                    </div>
+                    <div class="label">Themes</div>
+                </div>
+            </div>
+            <div id="sidebar-section-2">
+                <div class="tab" data-target="ai-chat">
+                    <div class="icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" color="primary">
+                            <path d="M15.8206 1.36075C15.7973 1.15542 15.6237 1.00021 15.4171 1C15.2104 0.999789 15.0365 1.15464 15.0128 1.35993C14.865 2.64161 14.1416 3.36501 12.8599 3.51284C12.6546 3.53652 12.4998 3.71044 12.5 3.91708C12.5002 4.12373 12.6554 4.29733 12.8608 4.32059C14.1243 4.4637 14.8978 5.18014 15.0118 6.4628C15.0304 6.67271 15.2064 6.83357 15.4171 6.83333C15.6279 6.8331 15.8035 6.67184 15.8217 6.46189C15.9311 5.19736 16.6974 4.43112 17.9619 4.32166C18.1718 4.30348 18.3331 4.12787 18.3333 3.91712C18.3336 3.70638 18.1727 3.5304 17.9628 3.51176C16.6801 3.39782 15.9637 2.62425 15.8206 1.36075Z" fill="currentColor"></path><path d="M13.8462 13.8092C13.8263 13.6332 13.6775 13.5002 13.5004 13.5C13.3232 13.4998 13.1742 13.6326 13.1539 13.8085C13.0272 14.9071 12.4071 15.5272 11.3085 15.6539C11.1326 15.6742 10.9998 15.8232 11 16.0004C11.0002 16.1775 11.1332 16.3263 11.3092 16.3462C12.3922 16.4689 13.0553 17.083 13.1529 18.1824C13.1689 18.3623 13.3198 18.5002 13.5004 18.5C13.681 18.4998 13.8316 18.3616 13.8471 18.1816C13.941 17.0977 14.5977 16.441 15.6816 16.3471C15.8616 16.3316 15.9998 16.181 16 16.0004C16.0002 15.8198 15.8623 15.6689 15.6824 15.6529C14.583 15.5553 13.9689 14.8922 13.8462 13.8092Z" fill="currentColor"></path><path d="M7.50013 4C7.52445 7.24324 10.2568 9.98287 13.5 9.99994C10.2568 9.99994 7.52445 12.7568 7.50013 16C7.4758 12.7568 4.74324 9.99994 1.5 9.99994C4.74324 9.99994 7.4758 7.24324 7.50013 4Z" stroke="currentColor" stroke-width="1.33" stroke-linejoin="round"></path>
+                        </svg>
+                    </div>
+                    <div class="label">Chat Other AI</div>
+                </div>
+            </div>
+        </div>
+        <div id="sidebar-footer">
+            <div class="paypal-button">
+                <a class="paypal-donation-button" target="_blank" href="https://www.paypal.com/donate/?hosted_button_id=STMWYARPEQK76">
+                    <span>Support me</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <div id="main-content">
+        <div class="content-panel" id="dashboard">
+            <div class="cm">Coming Soon</div>
+        </div>
+
+        <div class="content-panel active" id="utils">
+            <fieldset id="gptutils-tokencounter">
+                <legend>Token Counter</legend>
+                <div class="enable">
+                    <div class="field-row">
+                        <div class="toggle-button">
+                            <span>Enable:</span>
+                            <label class="switch">
+                                <input 
+                                    type="checkbox"
+                                    data-path="utils.tokenCounter.enable"
+                                    data-default="true"
+                                    data-type="boolean"
+                                    data-category="utils"
+                                >
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="options">
+                    <div class="field-row indent">
+                        <div class="dropdown-selection">
+                            <span>Tokenizer:</span>
+                            <select 
+                                name="tokenizer"
+                                data-path="utils.tokenCounter.options.tokenizer"
+                                data-default="0"
+                                data-type="int"
+                                data-valid='["0", "1"]'
+                            >
+                                <option value="0">o200k_base</option>
+                                <option value="1">cl100k_base</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset id="gptutils-tokencounter">
+                <legend>Word Counter</legend>
+                <div class="enable">
+                    <div class="field-row">
+                        <div class="toggle-button">
+                            <span>Enable:</span>
+                            <label class="switch">
+                                <input 
+                                    type="checkbox" 
+                                    data-path="utils.wordCounter.enable"
+                                    data-default="true"
+                                    data-type="boolean"
+                                    
+                                >
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="options">
+                    <div class="field-row indent">
+                        <div class="dropdown-selection">
+                            <span class="dropdown-arrow">Algorithm:</span>
+                            <select 
+                                name="wordcounter" 
+                                data-path="utils.wordCounter.options.algorithm"
+                                data-default="1"
+                                data-type="int"
+                                data-valid='["1", "2"]'
+                            >
+                                <option value="1">simple</option>
+                                <option value="2">advance</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="content-panel" id="themes">
+            <div class="cm">Coming Soon</div>
+        </div>
+
+        <div class="content-panel" id="ai-chat">
+            <div class="cm">Coming Soon</div>
+        </div>
+
+        <div class="footer">
+            <p class="shine" style="margin: 0;">More <a target="_blank" class="gptutils-link" style="cursor: pointer; text-decoration: underline;" href="https://github.com/ZedUnknown/ChatGPT-Utils">features and updates</a> are coming soon!</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ==========[MARKER + PANELS]==========
+    const sidebar = document.querySelector('#sidebar');
+    const marker = document.querySelector('#sidebar #marker');
+    const tabs = document.querySelectorAll('#sidebar .tab');
+    const panels = document.querySelectorAll('#main-content .content-panel');
+
+    tabs.forEach((tab) => {
+        tab.addEventListener('click', () => {
+            // 1. Remove previous active status
+            tabs.forEach(el => el.classList.remove('active'));
+            panels.forEach(el => el.classList.remove('active'));
+
+            // 2. Activate current tab and its panel
+            tab.classList.add('active');
+            const targetPanelId = tab.dataset.target; // use data-target
+            const targetPanel = document.getElementById(targetPanelId);
+
+            if (targetPanel) {
+                targetPanel.classList.add('active');
+            }
+
+            // move marker to the selected tab
+            moveMarker(tab);
+        });
+        moveMarker(tabs[1]); // initial call   
+    });
+    
+    async function moveMarker(tab) {
+        const parentRect = sidebar.getBoundingClientRect();
+        const tabRect = tab.getBoundingClientRect();
+        const markerRect = marker.getBoundingClientRect()
+        let verticalOffset = 0;
+        let relativeTop = tabRect.top - parentRect.top;
+        if ((tabRect.height - markerRect.height) > 0) {
+            verticalOffset = (tabRect.height - markerRect.height) / 2
+            relativeTop = relativeTop + verticalOffset;
+        } else {
+            verticalOffset = (markerRect.height - tabRect.height) / 2
+            relativeTop = relativeTop - verticalOffset;
+        }
+        marker.style.transform = `translateY(${relativeTop}px)`;
+    }
+    
+    // ==========[Sidebar Toggle]==========
+    const sidebarToggleBtn = document.querySelector('#sidebar-toggle-button');
+    let sidebarToggleStatus = sidebarToggleBtn.getAttribute('aria-expanded');
+    sidebarToggleBtn.addEventListener('click', () => {
+        document.querySelector('#sidebar').classList.toggle('sidebar-collapsed');
+    });
+
+    // ==========[Dropdown Disable]==========
+    const fields = document.querySelectorAll('fieldset');
+    fields.forEach((field) => {
+        const enableField = field.querySelector('.enable');
+        const optionsField = field.querySelector('.options');
+
+        const inputElement = enableField.querySelector('input');
+
+        const toggle = () => {
+            const enable = !!inputElement.checked;
+            optionsField.classList.toggle('disabled', !enable);
+        }
+        inputElement.addEventListener('change', () => {
+            toggle();
+        })
+
+        toggle(); // initial call
+    });
+
+</script>
+
+</body>
+</html>

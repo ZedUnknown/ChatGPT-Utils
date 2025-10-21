@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "ChatGPT-Utils",
-    "version": "1.1.0",
+    "version": "2.1.0",
     "author": "Zed Unknown",
     "description": "Various Utilities for ChatGPT",
     "permissions": ["scripting", "activeTab", "storage"],
@@ -12,7 +12,7 @@
         "http://chatgpt.com/*"
     ],
     "background": {
-        "service_worker": "background.js",
+        "service_worker": "services/background.js",
         "type": "module"
     },
     "content_scripts": [
@@ -24,19 +24,32 @@
                 "http://chatgpt.com/*"
             ],
             "js": [
-                "main.js",
-                "overlay.js",
-                "./helpers/storageManager_out.js"
+                "contentScripts/main.js",
+                "contentScripts/helpers/loggers.js",
+                "contentScripts/helpers/storageManager.js",
+                "contentScripts/overlay/overlayCreate.js",
+                "contentScripts/overlay/overlayConfig.js",
+                "contentScripts/overlay/overlayToggle.js"
             ],
+            "type": "module",
             "run_at": "document_end"
         }
     ],
     "web_accessible_resources": [
         {
             "resources": [
-                "libs/*.js",
-                "helpers/*.js",
-                "utils/tokenCounter.js"
+                "injectedScripts/globals/*.js",
+                "injectedScripts/libs/*.js",
+                "injectedScripts/containers/*.js",
+                "injectedScripts/listeners/*.js",
+                "injectedScripts/helpers/*.js",
+                "injectedScripts/triggers/*.js",
+                "injectedScripts/utils/*.js",
+
+                "contentScripts/overlay/overlayToggle.js",
+                "contentScripts/overlay/resources/shadow.html",
+                "contentScripts/overlay/resources/shadow.css",
+                "contentScripts/overlay/resources/shadow.js"
             ],
             "matches": [
                 "https://chat.openai.com/*",
