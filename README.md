@@ -61,12 +61,13 @@ The current version only includes the **Token Counter**, but more utilities and 
 - [x] **Token Counter**
 - [x] **Word Counter**
 - [x] **Multi Tokenizers**
+- [x] **Utility Selection UI**
 - [ ] **Token Tracker**
 - [ ] **Chat Exporter**
 - [ ] **Chat Organizer**
-- [ ] **Token Budgeting per Model**
-- [ ] **Context Preview**
-- [ ] **Utility Selection UI**
+- [ ] **Grammar Checker**
+- [ ] **Theme Customizer**
+- [ ] **Free AI Service via OpenWeb UI**
 **and many more...**
 
 Stay tuned for regular feature drops and UI improvements!
