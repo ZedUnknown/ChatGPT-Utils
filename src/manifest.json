@@ -24,12 +24,12 @@
                 "http://chatgpt.com/*"
             ],
             "js": [
-                "contentScripts/main.js",
                 "contentScripts/helpers/loggers.js",
                 "contentScripts/helpers/storageManager.js",
                 "contentScripts/overlay/overlayCreate.js",
                 "contentScripts/overlay/overlayConfig.js",
-                "contentScripts/overlay/overlayToggle.js"
+                "contentScripts/overlay/overlayToggle.js",
+                "contentScripts/main.js"
             ],
             "type": "module",
             "run_at": "document_end"

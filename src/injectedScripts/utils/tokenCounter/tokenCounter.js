@@ -169,10 +169,6 @@ function checkLibraries() {
 			if (document.getElementById('GPTU-script-o200k_base') && document.getElementById('GPTU-script-cl100k_base')) {
 				clearInterval(checkLibraries);
 				if (DEBUG) console.log(`${PREFIX} The required tokenizer scripts ('o200k_base' or 'cl100k_base') have been loaded.`);
-	
-				// update the tokenizer
-				// tokenizer = window.GPTTokenizer_o200k_base; // multiple-tokenization ability in future
-				
 				resolve(true);
 			} else {
 				if (DEBUG) console.warn(`${PREFIX} The required tokenizer scripts ('o200k_base' or 'cl100k_base') are missing. Please ensure they are loaded.`);

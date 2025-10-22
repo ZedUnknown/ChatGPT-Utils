@@ -13,9 +13,10 @@ window.createOverlay = async function () {
     
         const container = document.createElement('div');
         container.id = window.overlayId;
+        // start without settings display to none
         container.style.cssText = `
             opacity: 0;
-            top: 100vw
+            top: 100vw;
         `;
         const shadow = container.attachShadow({ mode: 'open' });
         document.body.appendChild(container);
@@ -37,24 +38,42 @@ window.createOverlay = async function () {
             inside a Shadow DOM (or anywhere dynamically) are ignored and not executed.
             the script must be added manually through a content script.
         */
-           
+
         if (DEBUG) console.log(`${PREFIX} Overlay successfully created.`);
-        
-        await setupOverlayScript(shadow);
-        window.overlayReady = true;
+
         return shadow;
-           
+
         } catch (err) {
             console.error(`${PREFIX} Failed to create overlay:`, err);
         }
     }
 
-async function setupOverlayScript(shadowRoot) {
+// run after every update to the overlay has done by the other scripts
+window.setupOverlayScript = async function (shadowRoot) {
     // ==========[MARKER + PANELS]==========
     const sidebar = shadowRoot.querySelector('#sidebar');
     const marker = shadowRoot.querySelector('#sidebar #marker');
     const tabs = shadowRoot.querySelectorAll('#sidebar .tab');
     const panels = shadowRoot.querySelectorAll('#main-content .content-panel');
+
+    const moveMarker = function(marker, tab) {
+        const parentRect = sidebar.getBoundingClientRect();
+        const tabRect = tab.getBoundingClientRect();
+        const markerRect = marker.getBoundingClientRect()
+
+        let verticalOffset = 0;
+        let relativeTop = tabRect.top - parentRect.top;
+        if ((tabRect.height - markerRect.height) > 0) {
+            verticalOffset = (tabRect.height - markerRect.height) / 2
+            relativeTop = relativeTop + verticalOffset;
+        } else {
+            verticalOffset = (markerRect.height - tabRect.height) / 2
+            relativeTop = relativeTop - verticalOffset;
+        }
+        marker.style.transform = `translateY(${relativeTop}px)`;
+
+        console.log('marker moved');
+    }
     
     tabs.forEach((tab) => {
         tab.addEventListener('click', () => {
@@ -73,25 +92,8 @@ async function setupOverlayScript(shadowRoot) {
             // move marker to the selected tab
             moveMarker(marker, tab);
         });
-        moveMarker(marker, tabs[1]); // initial call
-
-        async function moveMarker(marker, tab) {
-            const parentRect = sidebar.getBoundingClientRect();
-            const tabRect = tab.getBoundingClientRect();
-            const markerRect = marker.getBoundingClientRect()
-
-            let verticalOffset = 0;
-            let relativeTop = tabRect.top - parentRect.top;
-            if ((tabRect.height - markerRect.height) > 0) {
-                verticalOffset = (tabRect.height - markerRect.height) / 2
-                relativeTop = relativeTop + verticalOffset;
-            } else {
-                verticalOffset = (markerRect.height - tabRect.height) / 2
-                relativeTop = relativeTop - verticalOffset;
-            }
-            marker.style.transform = `translateY(${relativeTop}px)`;
-        }
     });
+    moveMarker(marker, tabs[1]); // initial call
     
     // ==========[Dropdown Disable]==========
     const fields = shadowRoot.querySelectorAll('fieldset');
@@ -100,9 +102,13 @@ async function setupOverlayScript(shadowRoot) {
         const optionsField = field.querySelector('.options');
         const inputElement = enableField.querySelector('input');
 
+        // for optionless field
+        if (!enableField || !optionsField || !inputElement) {
+            return;
+        }
+
         const toggle = () => {
             const enable = !!inputElement.checked;
-
             optionsField.classList.toggle('disabled', !enable);
         }
 
@@ -112,20 +118,21 @@ async function setupOverlayScript(shadowRoot) {
         toggle(); // initial call
     });
 
-    const overlay = document.getElementById(window.overlayId);
-    if (overlay) {
-        overlay.style.cssText = `
-            display: none;
-            opacity: 1;
-            top: 0;
-        `;
-    }
-
     // ==========[Sidebar Toggle]==========
     const sidebarToggleBtn = shadowRoot.querySelector('#sidebar-toggle-button');
     sidebarToggleBtn.addEventListener('click', () => {
         sidebar.classList.toggle('sidebar-collapsed');
     });
+
+    const overlay = document.getElementById(window.overlayId);
+    if (overlay) {
+        overlay.style.cssText = `
+        display: none;
+        opacity: 1;
+        top: 0;
+    `;}
+
+    window.overlayReady = true;
 }
 
 })();

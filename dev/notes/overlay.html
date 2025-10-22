@@ -423,6 +423,10 @@
         font-family: quicksand, sans-serif;
         font-size: 1rem;
         color: #ffffff;
+        user-select: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+        -ms-user-select: none;
     }
 
     fieldset > legend {
@@ -551,11 +555,13 @@
         position: relative;
         width: 100%;
     }
-
+    
     .footer {
         position: absolute;
         bottom: 0;
         left: 50%;
+        font-weight: 500;
+        font-family: "Poppins", sans-serif;
         transform: translateX(-50%);
         text-align: center;
         padding-bottom: 0.1rem;
@@ -567,8 +573,6 @@
     .footer .shine {
         display: inline-block;
         font-size: 18px;
-        font-weight: 600;
-        font-family: "Poppins", sans-serif;
         text-decoration: none;
         white-space: nowrap;
         background: linear-gradient(
@@ -716,6 +720,7 @@
                             <span>Enable:</span>
                             <label class="switch">
                                 <input 
+                                    checked
                                     type="checkbox"
                                     data-path="utils.tokenCounter.enable"
                                     data-default="true"
@@ -757,7 +762,6 @@
                                     data-path="utils.wordCounter.enable"
                                     data-default="true"
                                     data-type="boolean"
-                                    
                                 >
                                 <span class="slider"></span>
                             </label>
@@ -773,10 +777,9 @@
                                 data-path="utils.wordCounter.options.algorithm"
                                 data-default="1"
                                 data-type="int"
-                                data-valid='["1", "2"]'
+                                data-valid='["1"]'
                             >
-                                <option value="1">simple</option>
-                                <option value="2">advance</option>
+                                <option value="1">alfaaz</option>
                             </select>
                         </div>
                     </div>
@@ -844,7 +847,6 @@
     
     // ==========[Sidebar Toggle]==========
     const sidebarToggleBtn = document.querySelector('#sidebar-toggle-button');
-    let sidebarToggleStatus = sidebarToggleBtn.getAttribute('aria-expanded');
     sidebarToggleBtn.addEventListener('click', () => {
         document.querySelector('#sidebar').classList.toggle('sidebar-collapsed');
     });
@@ -864,7 +866,6 @@
         inputElement.addEventListener('change', () => {
             toggle();
         })
-
         toggle(); // initial call
     });
 

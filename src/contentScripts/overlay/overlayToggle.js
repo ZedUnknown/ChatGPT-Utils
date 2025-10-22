@@ -6,6 +6,7 @@ const PREFIX = 'Overlay Toggle |';
 // run toggleOverlay immediately on script load
 (async function toggleOverlay() {
     const overlay = document.getElementById(window.overlayId);
+    if (DEBUG) console.log(`${PREFIX} overlay: ${overlay} && overlayReady: ${window.overlayReady}`);
     if (overlay && window.overlayReady) {
         // toggle visibility and update the extension icon state
         const isHidden = overlay.style.display === "none";

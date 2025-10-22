@@ -36,7 +36,6 @@ window.registerUtil({
 		},
 		configs: {
 			enable: false,
-			algorithm: 0
 		},
 		variables: {}
 	}
@@ -48,16 +47,21 @@ let PARENT_CONTAINER_ID = null;
 function init() {
 	if (DEBUG) console.log(`${PREFIX} init called...`);
 
-	// take the parent container and create and append the util
-	window.get_GPTU_UIC_R().then(({id, container}) => {
-		if (DEBUG) console.log(`${PREFIX} The PARENT_CONTAINER container was successfully located: ${id}`);
-		PARENT_CONTAINER = container;
-		PARENT_CONTAINER_ID = id;
+	// checking libraries
+	checkLibraries().then((result) => {
+		if (result) {
+			// take the parent container and create and append the util
+			window.get_GPTU_UIC_R().then(({id, container}) => {
+				if (DEBUG) console.log(`${PREFIX} The PARENT_CONTAINER container was successfully located: ${id}`);
+				PARENT_CONTAINER = container;
+				PARENT_CONTAINER_ID = id;
 
-		// create the word counter
-		if (PARENT_CONTAINER && PARENT_CONTAINER_ID) {
-			window.__registry__[window.WORD_COUNTER_ID].variables.container = PARENT_CONTAINER_ID
-			createWordCounter(PARENT_CONTAINER);
+				// create the word counter
+				if (PARENT_CONTAINER && PARENT_CONTAINER_ID) {
+					window.__registry__[window.WORD_COUNTER_ID].variables.container = PARENT_CONTAINER_ID
+					createWordCounter(PARENT_CONTAINER);
+				}
+			});
 		}
 	});
 }
@@ -144,6 +148,30 @@ function showWordCount(wordCount) {
 	}
 
 	WordCounter_Element.innerHTML = `Word count: <span style="color: ${color}">${wordCount}</span>`;
+}
+
+// checks for word counter libraries
+function checkLibraries() {
+	return new Promise((resolve, reject) => {
+		const interval = 500;
+		const timeout = 5000;
+		let elapsed = 0;
+		const checkLibraries = setInterval(() => {
+			if (DEBUG) console.log(`${PREFIX} Checking for the required word counter libraries...`);
+			if (document.getElementById('GPTU-script-alfaaz')) {
+				clearInterval(checkLibraries);
+				if (DEBUG) console.log(`${PREFIX} The required word counter scripts ('alfaaz') have been loaded.`);
+				resolve(true);
+			} else {
+				if (DEBUG) console.warn(`${PREFIX} The required word counter scripts ('alfaaz') are missing. Please ensure they are loaded.`);
+				elapsed += interval;
+				if (elapsed > timeout) {
+					clearInterval(checkLibraries);
+					reject(false);
+				}
+			}
+		}, interval);
+	})
 }
 
 // ===[Theme Listener]===

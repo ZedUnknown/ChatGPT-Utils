@@ -40,13 +40,17 @@ let ConfigInMemory = {}
 // all input elements
 let allInputElements = null;
 
+// shadow dom from overlayCreate.js
+let shadowDom = null;
+
 // 1. do initial update to the listeners
 // 2. load the config to the overlay
+// 3. start listening
 (async function init() {
     if (DEBUG) console.log(`${PREFIX} init called...`);
 
     // Create overlay and wait for it to finish
-    const shadowDom = await createOverlay();
+    shadowDom = await createOverlay();
     allInputElements = shadowDom.querySelectorAll('[data-path]');
     if (DEBUG) console.log(`${PREFIX} Found ${allInputElements.length} input elements.`);
     
@@ -115,6 +119,9 @@ function updateOverlayElements(config) {
             if (DEBUG) console.error(`${PREFIX} error ${e}`);
         }
     })
+
+    // finally setup the scripts for the overlay
+    window.setupOverlayScript(shadowDom);
 }
 
 function startListening() {
