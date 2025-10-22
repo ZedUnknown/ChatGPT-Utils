@@ -36,7 +36,7 @@ def extract_public_key(private_key_pem_string):
         print(f"Error extracting public key: {e}")
         return None
 
-with open("../key.pem", "r") as key_file:
+with open("./key.pem", "r") as key_file:
     your_private_key_string = key_file.read()
 
 # Call the function to extract the public key
@@ -49,4 +49,3 @@ if extracted_public_key:
     print("Copy the entire content above (including BEGIN/END PUBLIC KEY lines) and paste it into the Chrome Web Store.")
 else:
     print("Failed to extract the public key.")
-
