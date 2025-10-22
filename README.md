@@ -10,26 +10,32 @@
 
 &nbsp;
 
-## 🚀 Features
+## Features
 
-✅ **Token Counter**  
-Easily view how many tokens your selected text will consume. Ideal for free & paid users to keep an eye on token counts.
+A growing set of utilities designed to enhance the ChatGPT experience—developed as a side project and continuously evolving.
 
-- Works directly on the page
+🎫 **Token Counter**  
+Quickly see how many tokens your selected text will consume. Perfect for both free and paid users who want to monitor usage efficiently.
 - Powered by OpenAI-compatible tokenizers (`o200k` and `cl100k` support)
 
 <details>
 <summary>Click Here to Preview</summary>
    
-  ![Theme Compatibility Preview](https://raw.githubusercontent.com/DaveUnknown/image-library/main/ChatGPT-Utils/token-counter-theme-compatibility.png)
+  ![Token Counter](https://raw.githubusercontent.com/DaveUnknown/image-library/main/ChatGPT-Utils/token-counter.png)
 </details>
 
-&nbsp;
+🈸 **Word Counter**  
+Instantly count the number of words in your selected text.
+- Powered by **Alfaaz**, the fastest known word counter (credit to [@thecodrr](https://github.com/thecodrr/alfaaz)).
 
+<details>
+<summary>Click Here to Preview</summary>
+   
+  ![Word Counter](https://raw.githubusercontent.com/DaveUnknown/image-library/main/ChatGPT-Utils/word-counter.png)
+</details>
+
+## Installation
 Here are a few improved versions of your installation guide, focusing on clarity, conciseness, and user-friendliness.
-
----
-## 📦 Installation
 
 ### From the Chrome Web Store
 
@@ -47,33 +53,28 @@ Here are a few improved versions of your installation guide, focusing on clarity
 
 **Note:** _This extension does not support Firefox or Safari._
 
-&nbsp;
-
 ## 🔄 Planned Updates
 
 The current version only includes the **Token Counter**, but more utilities and functions are coming soon:
 
-- **Automatic Update System** - The `update_url` key has been restricted in many browsers, making this feature only available via the Chrome Web Store.
-
-- **Token Tracker**
-- **Multi-token Counters**
-- **Chat Exporter**
-- **Chat Organizer**
-- **Token Budgeting per Model**
-- **Context Preview**
-- **Utility Selection UI**
-- **and many more...**
+- [x] **Automatic Update System** - The `update_url` key has been restricted in many browsers, making this feature only available via the Chrome Web Store.
+- [x] **Token Counter**
+- [x] **Word Counter**
+- [x] **Multi Tokenizers**
+- [ ] **Token Tracker**
+- [ ] **Chat Exporter**
+- [ ] **Chat Organizer**
+- [ ] **Token Budgeting per Model**
+- [ ] **Context Preview**
+- [ ] **Utility Selection UI**
+**and many more...**
 
 Stay tuned for regular feature drops and UI improvements!
-
-&nbsp;
 
 ## 🤝 Contributing
 
 Suggestions, feature requests, or bug reports are welcome.  
 Create an issue or open a pull request on the repository.
-
-&nbsp;
 
 ## License 
 
