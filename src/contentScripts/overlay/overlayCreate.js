@@ -40,7 +40,6 @@ window.createOverlay = async function () {
         */
 
         if (DEBUG) console.log(`${PREFIX} Overlay successfully created.`);
-
         return shadow;
 
         } catch (err) {
@@ -71,8 +70,6 @@ window.setupOverlayScript = async function (shadowRoot) {
             relativeTop = relativeTop - verticalOffset;
         }
         marker.style.transform = `translateY(${relativeTop}px)`;
-
-        console.log('marker moved');
     }
     
     tabs.forEach((tab) => {
