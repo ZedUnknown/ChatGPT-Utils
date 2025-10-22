@@ -14,7 +14,7 @@ const THEME = {
 	'light': {
 		'bg': '#ffffff',
 		'color': '#5d5d5d',
-		'border-color': '#000000',
+		'border-color': '#e0e0e0',
 		'boxShadow': '1px -1px 1px 0px rgba(0,0,0,0.1)',
 	}
 };
@@ -23,6 +23,8 @@ const THEME = {
 let currentTheme = window.currentTheme;
 window.addEventListener('themeChanged', (e) => {
     currentTheme = e.detail.theme;
+	// window.get_GPTU_UIC_R(); <-- not needed as all utils will call this when they detect a theme update
+
 });
 
 let userInputContainer = null
