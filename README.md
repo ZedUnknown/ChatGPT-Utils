@@ -12,7 +12,7 @@
 
 ## Features
 
-A growing set of utilities designed to enhance the ChatGPT experience—developed as a side project and continuously evolving.
+A personal learning project creating utilities to improve the ChatGPT experience.
 
 🎫 **Token Counter**  
 Quickly see how many tokens your selected text will consume. Perfect for both free and paid users who want to monitor usage efficiently.
