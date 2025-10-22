@@ -62,7 +62,8 @@ window.get_GPTU_UIC_R = function () {
 					GPTU_UIC_R.style.position = 'absolute';
 					/* this puts the new container to the top
 					while allowing it to exapnd to the top */
-					GPTU_UIC_R.style.bottom = '5px';
+					GPTU_UIC_R.style.bottom = '0';
+					GPTU_UIC_R.style.marginBottom = '5px';
 					GPTU_UIC_R.style.right = '0';
 					GPTU_UIC_R.style.padding = '0.8rem 0.8rem 0.8rem 0.8rem';
 					GPTU_UIC_R.style.zIndex = '-1';

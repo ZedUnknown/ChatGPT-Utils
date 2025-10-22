@@ -106,9 +106,9 @@ function triggerSetUp() {
 				userInputContainer.style.setProperty('border-radius', border, 'important');
 				userInputContainer.style.borderRadius = border;
 
-
 				// === Apply parent container styles ===
-				GPTU_UIC_R_CONTAINER.style.bottom = isTextSelected ? userInputContainerStyles.height : '5px';
+				GPTU_UIC_R_CONTAINER.style.bottom = isTextSelected ? '100%' : '0';
+				GPTU_UIC_R_CONTAINER.style.marginBottom = isTextSelected ? '0' : '5px';
 				GPTU_UIC_R_CONTAINER.style.borderRadius = isTextSelected ? "18px 18px 0px 0px" : userInputContainerStyles.borderRadius;
 				GPTU_UIC_R_CONTAINER.style.opacity = isTextSelected ? 1 : 0;
 
