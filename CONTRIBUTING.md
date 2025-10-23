@@ -11,4 +11,7 @@ commercial use without written permission from the author.
 We welcome contributions from hobbyists, students, and developers who
 respect these terms.
 
-Please fork the repository and submit pull requests as usual.
+## Development
+
+Please refer to the `dev/` directory for development.  
+Fork the repository and submit pull requests as usual.
