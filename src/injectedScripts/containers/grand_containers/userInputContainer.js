@@ -16,10 +16,15 @@ changes made to the UI by Oppenheimer, *cough OpenAI */
 // intervals are not being used as it gives the expected result without them
 window.getUserInputContainer = function () {
 	return new Promise((resolve) => {
-		let bottomContainer = document.getElementById("thread-bottom");
+		let bottomContainer = document.getElementById("thread-bottom") || document.getElementById("thread-bottom-container");
+		if (!bottomContainer) {
+			if (DEBUG) console.log(`${PREFIX} Unable to locate the bottom container.`);
+			resolve(false);
+		}
 		bottomContainer.style.position = 'relative';
 	
 		// 1. attempt to locate the container by assigned custom ID: bg-token-bg-primary (if already exists)
+		if (DEBUG) console.log(`${PREFIX} Attempting to locate the '${newUserInputContainer_ID}' by custom ID.`);
 		let container = document.getElementById(newUserInputContainer_ID);
 		if (container) {
 			if (DEBUG) console.log(`${PREFIX} The container '${newUserInputContainer_ID}' already exists.`);
