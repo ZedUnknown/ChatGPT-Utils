@@ -69,7 +69,7 @@ function togglePromptCompressor(text) {
 	}
 	if (!text) return;
 
-	const compressedText = text.replace(/\n/g, '  ').replace(/\s+/g, ' ');
+	const compressedText = text.replace(/\s+/g, ' ').replace(/\n/g, '  ');
 	return compressedText;
 }
 
