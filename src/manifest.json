@@ -23,6 +23,9 @@
                 "https://chatgpt.com/*",
                 "http://chatgpt.com/*"
             ],
+            "css": [
+                "styles/main.css"
+            ],
             "js": [
                 "contentScripts/helpers/loggers.js",
                 "contentScripts/helpers/storageManager.js",

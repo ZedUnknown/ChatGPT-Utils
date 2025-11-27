@@ -15,14 +15,24 @@ const PREFIX = 'Observer Page Change |';
             if (currentUrl === lastUrl) return;
 
             if (DEBUG) console.log(`${PREFIX} Page changed from ${lastUrl} → ${currentUrl}`);
-            lastUrl = currentUrl;
-
-            const ignoreUrls = ["settings", "pricing"];
-            const hash = currentUrl.split("#")[1];
-            if (hash && ignoreUrls.includes(hash)) {
+            
+            const ignoreHashFragments = ["settings", "pricing"];
+            const ignoredEndPoints = ["project"];
+            
+            const lastHash = lastUrl.split("#").at(1);
+            const lastEndPoint = lastUrl.split("/").at(-1);
+            const newHash = currentUrl.split("#").at(1);
+            const newEndpoint = currentUrl.split("/").at(-1);
+            
+            if (
+                newHash && ignoreHashFragments.includes(newHash) || newEndpoint && ignoredEndPoints.includes(newEndpoint) ||
+                lastHash && ignoreHashFragments.includes(lastHash) || lastEndPoint && ignoredEndPoints.includes(lastEndPoint)
+            ) {
                 if (DEBUG) console.log(`${PREFIX} Ignored URL change.`);
                 return;
             }
+            
+            lastUrl = currentUrl;
 
             for (const callback of callbacks) {
                 try {

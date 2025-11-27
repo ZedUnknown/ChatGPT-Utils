@@ -3,7 +3,6 @@ const PREFIX = 'Token Counter |';
 
 const THEME = {
 	'dark': {
-		'color': '#b4b4b4',
 		'thresholds': {
 			'low': [100, '#ffffff'],
 			'medium': [500, '#50ed64'],
@@ -13,7 +12,6 @@ const THEME = {
 		}
 	},
 	'light': {
-		'color': '#5d5d5d',
 		'thresholds': {
 			'low': [100, '#000000'],
 			'medium': [500, '#009b14'],
@@ -77,17 +75,15 @@ function createTokenCounter(parentContainer) {
 	// update theme if exists
 	if (document.getElementById(window.TOKEN_COUNTER_ID)) {
 		if (DEBUG) console.log(`${PREFIX} Updating the token counter theme to: ${window.currentTheme}.`);
-		TokenCounter_Element.style.color = THEME[window.currentTheme]['color'];
+		const isDark = (window.currentTheme === 'dark');
+		TokenCounter_Element.classList.toggle('dark', isDark);
 		return;
 	} else {
 		// try to create the token counter
 		if (DEBUG) console.log(`${PREFIX} Attempting to create the token counter...`);
 		if (DEBUG) console.log(`${PREFIX} The token counter has been created successfully.`);
 		TokenCounter_Element.id = window.TOKEN_COUNTER_ID;
-		TokenCounter_Element.style.display = 'block';
-		TokenCounter_Element.style.padding = '0.1rem 0.1rem 0.1rem 0.1rem';
-		TokenCounter_Element.style.textAlign = 'right';
-
+		TokenCounter_Element.classList.add('utils-in-GPTU-UIC-R')
 		parentContainer.appendChild(TokenCounter_Element);
 		if (DEBUG) console.log(`${PREFIX} The token counter has been inserted successfully.`);
 		createTokenCounter();

@@ -30,7 +30,8 @@ const scripts = {
         'observePageChange' : ['injectedScripts/listeners/observePageChange.js', 'module'],
         'observeClassChange' : ['injectedScripts/listeners/observeClassChange.js', 'module'],
         'observeElementChange' : ['injectedScripts/listeners/observeElementChange.js', 'module'],
-        'selectionChange' : ['injectedScripts/listeners/selectionChange.js', 'module']
+        'selectionChange' : ['injectedScripts/listeners/selectionChange.js', 'module'],
+        'onClick': ['injectedScripts/listeners/onClick.js', 'module'],
     },
     'libs' : {
         'o200k_base' : ['injectedScripts/libs/tokenizers/o200k_base.js', 'module'],
@@ -45,19 +46,17 @@ const scripts = {
     },
     'containers' : {
         'userInputContainer' : ['injectedScripts/containers/grand_containers/userInputContainer.js', 'module'],
-        // 'GPTU-LB' : ['injectedScripts/containers/new_containers/GPTU-LB.js', 'module'],
-        // 'GPTU-RB' : ['injectedScripts/containers/new_containers/GPTU-RB.js', 'module'],
-        // 'GPTU-RM' : ['injectedScripts/containers/new_containers/GPTU-RM.js', 'module'],
-        // 'GPTU-LM' : ['injectedScripts/containers/new_containers/GPTU-LM.js', 'module'],
-        // 'GPTU-UIC-M' : ['injectedScripts/containers/new_containers/GPTU-UIC-M.js', 'module'],
         'GPTU-UIC-R' : ['injectedScripts/containers/new_containers/GPTU-UIC-R.js', 'module'],
+        'GPTU-UIC-B' : ['injectedScripts/containers/new_containers/GPTU-UIC-B.js', 'module'],
     },
     'triggers' : {
         'trig_GPTU-UIC-R' : ['injectedScripts/triggers/trig_GPTU-UIC-R.js', 'module'],
+        'trig_GPTU_UIC_B' : ['injectedScripts/triggers/trig_GPTU-UIC-B.js', 'module'],
     },
     'utils' : {
         'tokenCounter' : ['injectedScripts/utils/tokenCounter/tokenCounter.js', 'module'],
         'wordCounter' : ['injectedScripts/utils/wordCounter/wordCounter.js', 'module'],
+        'promptCompressor':  ['injectedScripts/utils/promptCompressor/promptCompressor.js', 'module'],
     },
     'end-helpers' : {
         'utilsConfigUpdate' : ['injectedScripts/helpers/end_helpers/utilsConfigUpdate.js', 'module'],

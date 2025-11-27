@@ -87,6 +87,10 @@ function triggerSetUp() {
 			// callback function for 'getSelection'
 			selectionHandler = (event) => {
 
+				// check the containers again if any triggering happen before the promise were to get fullfilled
+				if (!userInputContainer || !(userInputContainer instanceof Element)) return;
+				if (!GPTU_UIC_R_CONTAINER || !(GPTU_UIC_R_CONTAINER instanceof Element)) return;
+
 				// If all utils are disabled, do nothing (deprecate in future ??)
 				if (Object.values(window.__registry__).every(value => value?.configs?.enable === false)) {
 					if (DEBUG) console.log(`${PREFIX} All utils are disabled.`);
@@ -108,6 +112,15 @@ function triggerSetUp() {
 
 				// === Apply parent container styles ===
 				GPTU_UIC_R_CONTAINER.style.bottom = isTextSelected ? '100%' : '0';
+				// apply zIndex change only after the transition has completed (if isTextSelected is true)
+				if (isTextSelected) {
+					setTimeout(() => {
+						GPTU_UIC_R_CONTAINER.style.zIndex = 0;
+					}, 180); // almost match to transition time in main.css
+				} else {
+					GPTU_UIC_R_CONTAINER.style.zIndex = -1;
+				}
+				GPTU_UIC_R_CONTAINER.style.right = isTextSelected ? '-1px' : '0px';
 				GPTU_UIC_R_CONTAINER.style.marginBottom = isTextSelected ? '0' : '5px';
 				GPTU_UIC_R_CONTAINER.style.borderRadius = isTextSelected ? "18px 18px 0px 0px" : userInputContainerStyles.borderRadius;
 				GPTU_UIC_R_CONTAINER.style.opacity = isTextSelected ? 1 : 0;

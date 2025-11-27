@@ -36,12 +36,14 @@ window.getUserInputContainer = function () {
 		container = bottomContainer.querySelectorAll(`.${oldUserInputContainer_ID}`)[0];
 		if (container) {
 			if (DEBUG) console.log(`${PREFIX} The ${newUserInputContainer_ID} was found by UID class.`);
-			resolve( fix(container) );
+			container.id = newUserInputContainer_ID;
+			resolve( container );
 		} else {
 			container = bottomContainer.querySelectorAll(`.${oldUserInputContainer_ID}`);
 			if (container) {
 				if (DEBUG) console.log(`${PREFIX} The ${newUserInputContainer_ID} was found by UID class.`);
-				resolve( fix(container) );
+				container.id = newUserInputContainer_ID;
+				resolve( container );
 			}
 		}
 	
@@ -56,7 +58,8 @@ window.getUserInputContainer = function () {
 			container = findIt(bottomContainer, path);
 			if (container.classList.contains(oldUserInputContainer_ID)) {
 				if (DEBUG) console.log(`${PREFIX} The '${newUserInputContainer_ID}' was found by path guessing.`);
-				resolve( fix(container) );
+				container.id = newUserInputContainer_ID;
+				resolve( container );
 			}
 		}
 	})
@@ -80,23 +83,4 @@ function findIt(parent, path) {
 
 	if (_valid && node) return node;
 	return null;
-}
-
-// fixing certain styles for new container
-function fix(container) {
-	if (DEBUG) console.log(`${PREFIX} Fixing the user interface elements...`);
-	if (container) {
-		container.id = newUserInputContainer_ID;
-		container.classList.remove('rounded-[28px]');
-		container.style.borderRadius = '28px 28px 28px 28px';
-		container.classList.remove('overflow-clip');
-		container.style.overflow = 'visible';
-		container.style.position = 'relative';
-		container.style.transition = 'all 0.2s ease-in-out !important';
-		container.style.removeProperty('z-index');
-		if (DEBUG) console.log(`${PREFIX} The user interface elements have been fixed.`);
-		return container;
-	} else {
-		if (DEBUG) console.log(`${PREFIX} Failed to fix the user interface elements.`);
-	}
 }
