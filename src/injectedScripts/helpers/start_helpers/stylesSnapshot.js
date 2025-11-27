@@ -7,6 +7,7 @@ const DEBUG = false;
 const PREFIX = 'Get Style Snapshot |';
 
 window.getStylesSnapshot = function (element, only_properties=[]) {
+    if (!element || !(element instanceof Element)) return;
 	const computed = window.getComputedStyle(element);
     const snapshot = {};
     
