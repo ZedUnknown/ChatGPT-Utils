@@ -4,27 +4,11 @@ const PREFIX = 'GPTU-UIC-R |';
 const ID = 'GPTU-UIC-R';
 const GPTU_UIC_R = document.createElement('div');
 
-const THEME = {
-	'dark': {
-		'bg': '#303030',
-		'color': '#b4b4b4',
-		'border-color': '#363636',
-		'boxShadow': 'none',
-	},
-	'light': {
-		'bg': '#ffffff',
-		'color': '#5d5d5d',
-		'border-color': '#e0e0e0',
-		'boxShadow': '1px -1px 1px 0px rgba(0,0,0,0.1)',
-	}
-};
-
 // update theme
 let currentTheme = window.currentTheme;
 window.addEventListener('themeChanged', (e) => {
     currentTheme = e.detail.theme;
 	// window.get_GPTU_UIC_R(); <-- not needed as all utils will call this when they detect a theme update
-
 });
 
 let userInputContainer = null
@@ -49,44 +33,14 @@ window.get_GPTU_UIC_R = function () {
 				// update theme if exists
 				if (document.getElementById(ID)) {
 					if (DEBUG) console.log(`${PREFIX} Updating the ${ID} theme to: ${currentTheme}.`);
-					GPTU_UIC_R.style.backgroundColor = THEME[currentTheme]['bg'];
-					GPTU_UIC_R.style.color = THEME[currentTheme]['color'];
-					GPTU_UIC_R.style.boxShadow = THEME[currentTheme]['boxShadow'];
+                    const isDark = (window.currentTheme === 'dark');
+                    GPTU_UIC_R.classList.toggle('dark', isDark);
 					resolve({id: ID, container: GPTU_UIC_R});
 				} else {
 					// try..!!! to create a new
 					if (DEBUG) console.log(`${PREFIX} Attempting to create the ${ID}...`);
 					GPTU_UIC_R.id = ID;
-					GPTU_UIC_R.style.display = 'flex';
-					GPTU_UIC_R.style.flexDirection = 'column-reverse';
-					GPTU_UIC_R.style.position = 'absolute';
-					/* this puts the new container to the top
-					while allowing it to exapnd to the top */
-					GPTU_UIC_R.style.bottom = '0';
-					GPTU_UIC_R.style.marginBottom = '5px';
-					GPTU_UIC_R.style.right = '0';
-					GPTU_UIC_R.style.padding = '0.8rem 0.8rem 0.8rem 0.8rem';
-					GPTU_UIC_R.style.zIndex = '-1';
 					GPTU_UIC_R.style.borderRadius = initialBorderRadius;
-					GPTU_UIC_R.style.fontSize = '0.8rem';
-					GPTU_UIC_R.style.overflow = 'hidden';
-					GPTU_UIC_R.style.fontFamily = 'monospace';
-					GPTU_UIC_R.style.color = THEME[currentTheme]['color'];
-					GPTU_UIC_R.style.backgroundColor = THEME[currentTheme]['bg'];
-					GPTU_UIC_R.style.boxShadow = THEME[currentTheme]['boxShadow'];
-					GPTU_UIC_R.style.pointerEvents = 'none';
-	
-					GPTU_UIC_R.style.minWidth = '120px';
-					GPTU_UIC_R.style.maxWidth = '800px';
-					GPTU_UIC_R.style.minHeight = '45px';
-	
-					GPTU_UIC_R.style.border = '1px solid ' + THEME[currentTheme]['border-color'];
-					GPTU_UIC_R.style.borderBottom = 'none';
-					GPTU_UIC_R.style.opacity = '1';
-	
-					// transition animation
-					GPTU_UIC_R.style.transition = 'all 0.2s ease-in-out';
-	
 					if (DEBUG) console.log(`${PREFIX} The ${ID} has been created successfully.`);
 	
 					// append to PARENT_CONTAINER and return

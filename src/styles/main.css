@@ -1,0 +1,135 @@
+:root {
+    --background-primary: #ffffff;
+    --text-primary: #0D0D0D;
+    --text-secondary: #5d5d5d;
+    --border-primary: #0D0D0D;
+}
+
+.dark {
+    --background-primary: #303030;
+    --text-primary: #ffffff;
+    --text-secondary: #b4b4b4;
+    --border-primary: #ffffff4d;
+}
+
+#userInputContainer_ID {
+    position: relative !important;
+    border-radius: 28px;
+    border: 1px solid var(--border-primary) !important;
+    overflow: visible !important;
+    transition: all 0.2s ease-in-out !important;
+    box-shadow: none !important;
+}
+
+/* #userInputContainer_ID > *:not(#GPTU-UIC-R, #GPTU-UIC-B, #composer-plus-btn, #prompt-textarea) {
+    position: relative;
+    z-index: 1;
+} */
+
+#GPTU-UIC-R {
+    display: flex;
+    flex-direction: column-reverse;
+    position: absolute;
+    bottom: 10%;
+    margin-bottom: 5px;
+    right: 0;
+    padding: 0.8rem;
+    font-size: 0.8rem;
+    overflow: hidden;
+    font-family: monospace;
+    color: var(--text-secondary);
+    background-color: var(--background-primary);
+    border: 1px solid var(--border-primary);
+    border-bottom: none;
+    pointer-events: none;
+    min-width: 120px;
+    max-width: 800px;
+    min-height: 45px;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out, bottom 0.2s ease-in-out, right 0.2s ease-in-out, margin-bottom 0.2s ease-in-out, border-radius 0.2s ease-in-out, height 0.2s ease-in-out, width 0.2s ease-in-out, min-height 0.2s ease-in-out, min-width 0.2s ease-in-out;
+    z-index: -1;
+}
+
+.utils-in-GPTU-UIC-R {
+    display: block;
+    padding: 0.1rem;
+    text-align: right;
+    color: var(--text-secondary);
+}
+
+#GPTU-UIC-B {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    gap: 0.4rem;
+    top: 0%;
+    left: 2em;
+    margin-top: 0;
+    z-index: -1;
+    padding: 0.2rem;
+    max-height: 32px;
+    opacity: 1;
+    border-radius: 0px 0px 8px 8px;
+    color: var(--text-secondary);
+    background-color: var(--background-primary);
+    border: 1px solid var(--border-primary);
+    border-top: none;
+    cursor: default;
+    user-select: none;
+    transition: all 0.2s ease-out;
+    animation: appear 0.2s forwards;
+    animation-delay: 2s;
+}
+
+@keyframes appear {
+    100% {
+        top: 100%;
+    }
+}
+
+.utils-in-GPTU-UIC-B {
+    display: inline-block;
+    background-color: var(--text-primary);
+    border-radius: 4px;
+    height: 100%;
+    padding: 0.1rem;
+    text-align: center;
+    color: var(--background-primary);
+    cursor: pointer;
+}
+
+.utils-in-GPTU-UIC-B:hover,
+.utils-in-GPTU-UIC-B.dark:hover {
+    background-color: color-mix(in srgb, var(--text-primary) 80%, transparent);
+}
+
+/* Tooltip styles */
+.utils-in-GPTU-UIC-B[data-tooltip] {
+    position: relative;
+    z-index: 10;
+}
+
+.utils-in-GPTU-UIC-B[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    font-weight: 600;
+    transform: translate(-50%, -50%);
+    background-color: #000000;
+    color: #ffffff;
+    padding: 0.3rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 99999;
+}
+
+.utils-in-GPTU-UIC-B[data-tooltip]:hover::after {
+    opacity: 1;
+    visibility: visible;
+}

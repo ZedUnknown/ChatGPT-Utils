@@ -3,7 +3,6 @@ const PREFIX = 'Word Counter |';
 
 const THEME = {
 	'dark': {
-		'color': '#b4b4b4',
 		'thresholds': {
 			'low': [100, '#ffffff'],
 			'medium': [500, '#50ed64'],
@@ -13,7 +12,6 @@ const THEME = {
 		}
 	},
 	'light': {
-		'color': '#5d5d5d',
 		'thresholds': {
 			'low': [100, '#000000'],
 			'medium': [500, '#009b14'],
@@ -73,17 +71,15 @@ function createWordCounter(parentContainer) {
 	// update theme if exists
 	if (document.getElementById(window.WORD_COUNTER_ID)) {
 		if (DEBUG) console.log(`${PREFIX} Updating the word counter theme to: ${window.currentTheme}.`);
-		WordCounter_Element.style.color = THEME[window.currentTheme]['color'];
+		const isDark = (window.currentTheme === 'dark');
+		WordCounter_Element.classList.toggle('dark', isDark);
 		return;
 	} else {
 		// try to create the word counter
 		if (DEBUG) console.log(`${PREFIX} Attempting to create the word counter...`);
 		if (DEBUG) console.log(`${PREFIX} The word counter has been created successfully.`);
 		WordCounter_Element.id = window.WORD_COUNTER_ID;
-		WordCounter_Element.style.display = 'block';
-		WordCounter_Element.style.padding = '0.1rem 0.1rem 0.1rem 0.1rem';
-		WordCounter_Element.style.textAlign = 'right';
-
+		WordCounter_Element.classList.add('utils-in-GPTU-UIC-R')
 		parentContainer.appendChild(WordCounter_Element);
 		if (DEBUG) console.log(`${PREFIX} The word counter has been inserted successfully.`);
 		createWordCounter();
