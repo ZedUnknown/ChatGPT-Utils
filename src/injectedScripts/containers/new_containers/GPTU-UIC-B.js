@@ -20,7 +20,7 @@ window.get_GPTU_UIC_B = function () {
 	
 		const parentInterval = setInterval(async () => {
 			userInputContainer = await window.getUserInputContainer()
-			if (userInputContainer) {
+			if (userInputContainer || userInputContainer instanceof Element) {
 				clearInterval(parentInterval)
 				if (DEBUG) console.log(`${PREFIX} Found userInputContainer:`, userInputContainer);
 				

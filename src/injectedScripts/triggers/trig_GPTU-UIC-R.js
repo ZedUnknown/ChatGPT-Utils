@@ -88,8 +88,8 @@ function triggerSetUp() {
 			selectionHandler = (event) => {
 
 				// check the containers again if any triggering happen before the promise were to get fullfilled
-				if (!userInputContainer) return;
-				if (!GPTU_UIC_R_CONTAINER) return;
+				if (!userInputContainer || !(userInputContainer instanceof Element)) return;
+				if (!GPTU_UIC_R_CONTAINER || !(GPTU_UIC_R_CONTAINER instanceof Element)) return;
 
 				// If all utils are disabled, do nothing (deprecate in future ??)
 				if (Object.values(window.__registry__).every(value => value?.configs?.enable === false)) {
