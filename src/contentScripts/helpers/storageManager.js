@@ -40,22 +40,48 @@ chrome.storage.onChanged.addListener((changes, namespace) => {
 // initial update
 window.sendInitialUpdate = async function (_key = 'config', _namespace='sync') {
     const storageArea = _namespace === 'sync' ? chrome.storage.sync : chrome.storage.local;
-    storageArea.get(_key, (data) => {
-        window.postMessage({
-            action: "updatedStorage",
-            key: _key,
-            packet: data[_key],
-            initial: true
-        }, "*");
 
-        const event = new CustomEvent('updatedStorage', {
-            detail: {
+    if (!window.__handshake__forInitialUpdate) window.__handshake__forInitialUpdate = false;
+    console.log(`window.__handshake__forInitialUpdate: ${window.__handshake__forInitialUpdate}`)
+    const sendUpdate = () => {
+        storageArea.get(_key, (data) => {
+            window.postMessage({
+                action: "updatedStorage",
                 key: _key,
                 packet: data[_key],
                 initial: true
-            }
+            }, "*");
+    
+            const event = new CustomEvent('updatedStorage', {
+                detail: {
+                    key: _key,
+                    packet: data[_key],
+                    initial: true
+                }
+            });
+            window.dispatchEvent(event);
+            if (DEBUG) console.log(`${PREFIX} Initial config update passed ${JSON.stringify({detail: { key: _key,packet: data[_key],initial: true}})}\nwaiting for a confirmation...`);
         });
-        window.dispatchEvent(event);
+    }
+
+    const retry = setInterval(() => {
+        if (!window.__handshake__forInitialUpdate) {
+            sendUpdate()
+        }
+        else {
+            clearInterval(retry);
+            if (DEBUG) console.log(`${PREFIX} Handshake already successful. Stopping retries.`);
+        }
+    })
+
+    window.addEventListener("message", (e) => {
+        if (e.source !== window || !e.data || !e.data.handshake || typeof e.data.action !== 'string') {
+            return;
+        }
+        if (e.data.action === "updatedStorageConfirmed") {
+            window.__handshake__forInitialUpdate = e.data.handshake;
+            if (DEBUG) console.log(`${PREFIX} Handshake received successfuly!`);
+        }
     });
 }
 
