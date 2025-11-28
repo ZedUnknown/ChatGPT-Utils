@@ -2,7 +2,7 @@ const DEBUG = false;
 const PREFIX = 'trig_GPTU-UIC-B |';
 
 // ===[Containers]===
-let userInputContainer = null;
+let userInputContainer = window.userInputContainer; // as a fallback
 let GPTU_UIC_B_ID = null;
 let GPTU_UIC_B_CONTAINER = null;
 
@@ -17,20 +17,11 @@ let attempts = 0;
 function init() {
 	if (DEBUG) console.log(`${PREFIX} init called...`);
 
-	// taking userinput container to animate it's coners in this case
+	// to attach the new container in this case
 	window.getUserInputContainer().then((container) => {
 		userInputContainer = container;
 
 		if (userInputContainer) {
-			if (DEBUG) console.log(`${PREFIX} Found userInputContainer:`, userInputContainer);
-
-			// attach observer to grand container to detect changes
-			window.observeElementChange(userInputContainer, () => {
-				if (DEBUG) console.log(`${PREFIX} userInputContainer changed...`);
-				window.getUserInputContainer().then((container) => {
-					userInputContainer = container;
-				})
-			})
 			// copy only required styles
 			userInputContainerStyles = window.getStylesSnapshot(userInputContainer, ['width', 'height', 'left', 'top', 'right', 'bottom', 'borderRadius']);
 			
@@ -111,13 +102,8 @@ function triggerSetUp() {
 					}
 				}
 			}
-			// === Apply grandparent container styles ===
-			// window.observeElementChange(userInputContainer, () => {
-			// 	if (DEBUG) console.log(`${PREFIX} userInputContainer changed...`);
-			// 	init()
-			// })
-
 			window.addEventListener('getClick', clickHandler);
+
 			// reset everything on a page change (reinitialize after page change)
 			window.observePageChange([reset]);
 
