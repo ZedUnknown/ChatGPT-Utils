@@ -19,9 +19,9 @@ const PREFIX = 'Observer Page Change |';
             const ignoreHashFragments = ["settings", "pricing"];
             const ignoredEndPoints = ["project"];
             
-            const lastHash = lastUrl.split("#").at(1);
+            const lastHash = lastUrl.split("#").at(1).split("/").at(0); // e.g., https://..././...#settings | https://..././...#settings/Account
             const lastEndPoint = lastUrl.split("/").at(-1);
-            const newHash = currentUrl.split("#").at(1);
+            const newHash = currentUrl.split("#").at(1).split("/").at(0);
             const newEndpoint = currentUrl.split("/").at(-1);
             
             if (
