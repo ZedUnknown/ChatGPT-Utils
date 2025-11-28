@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "ChatGPT-Utils",
-    "version": "2.1.0",
+    "version": "2.2.1",
     "author": "Zed Unknown",
     "description": "Various Utilities for ChatGPT",
     "permissions": ["scripting", "activeTab", "storage"],
