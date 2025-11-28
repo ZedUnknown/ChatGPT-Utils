@@ -1,3 +1,5 @@
+const DEBUG = false;
+
 // attach observer to userInputContainer to detect changes
 window.getUserInputContainer().then((userInputContainer) => {
 	window.observeElementChange(userInputContainer, () => {
