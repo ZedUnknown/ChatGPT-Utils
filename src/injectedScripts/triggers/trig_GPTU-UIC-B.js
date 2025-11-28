@@ -84,9 +84,10 @@ function triggerSetUp() {
 			if (clickHandler) return;
 
 			clickHandler = (event) => {
-				const clickedId = event.detail.id;
+				const parentId = event.detail.element.parentElement.id;
 
-				if (clickedId === window.PROMPT_COMPRESSOR_ID) {
+				if (parentId === window.PROMPT_COMPRESSOR_ID) {
+					const compressionMethod = event.detail.id;
 					const textArea = document.getElementById('prompt-textarea');
 					const textElements = textArea.querySelectorAll('p');
 
@@ -96,7 +97,7 @@ function triggerSetUp() {
 						collectedText += element.textContent;
 					})
 					if (collectedText === '') return;
-					const compressedText = window.__registry__[window.PROMPT_COMPRESSOR_ID].methods.toggle_method(collectedText);
+					const compressedText = window.__registry__[window.PROMPT_COMPRESSOR_ID].methods.toggle_method(compressionMethod, collectedText);
 					textArea.innerHTML = `<p>${compressedText}</p>`
 				}
 			}

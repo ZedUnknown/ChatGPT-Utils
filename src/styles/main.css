@@ -94,17 +94,24 @@
 }
 
 .utils-in-GPTU-UIC-B {
-    display: inline-block;
-    background-color: var(--text-primary);
-    border: none;
-    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
     height: 100%;
-    padding: 0.1rem;
-    text-align: center;
-    color: var(--background-primary);
 }
 
-.utils-in-GPTU-UIC-B:hover {
+.compression-utils {
+    display: inline-block;
+    border: none;
+    padding: 0.1rem;
+    border-radius: 4px;
+    text-align: center;
+    color: var(--background-primary);
+    background-color: var(--text-primary);
+}
+
+.compression-utils:hover {
     background-color: color-mix(in srgb, var(--text-primary) 80%, transparent);
 }
 
@@ -119,12 +126,12 @@
 }
 
 /* Tooltip styles */
-.utils-in-GPTU-UIC-B[data-tooltip] {
+.compression-utils[data-tooltip] {
     position: relative;
     z-index: 10;
 }
 
-.utils-in-GPTU-UIC-B[data-tooltip]::after {
+.compression-utils[data-tooltip]::after {
     content: attr(data-tooltip);
     position: absolute;
     bottom: 100%;
@@ -143,7 +150,7 @@
     z-index: 99999;
 }
 
-.utils-in-GPTU-UIC-B[data-tooltip]:hover::after {
+.compression-utils[data-tooltip]:hover::after {
     opacity: 1;
     visibility: visible;
 }
