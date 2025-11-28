@@ -28,6 +28,7 @@ window.getUserInputContainer = function () {
 		let container = document.getElementById(newUserInputContainer_ID);
 		if (container) {
 			if (DEBUG) console.log(`${PREFIX} The container '${newUserInputContainer_ID}' already exists.`);
+			window.userInputContainer = container;
 			resolve( container );
 		}
 	
@@ -37,12 +38,14 @@ window.getUserInputContainer = function () {
 		if (container) {
 			if (DEBUG) console.log(`${PREFIX} The ${newUserInputContainer_ID} was found by UID class.`);
 			container.id = newUserInputContainer_ID;
+			window.userInputContainer = container;
 			resolve( container );
 		} else {
 			container = bottomContainer.querySelectorAll(`.${oldUserInputContainer_ID}`);
 			if (container) {
 				if (DEBUG) console.log(`${PREFIX} The ${newUserInputContainer_ID} was found by UID class.`);
 				container.id = newUserInputContainer_ID;
+				window.userInputContainer = container;
 				resolve( container );
 			}
 		}
@@ -59,6 +62,7 @@ window.getUserInputContainer = function () {
 			if (container.classList.contains(oldUserInputContainer_ID)) {
 				if (DEBUG) console.log(`${PREFIX} The '${newUserInputContainer_ID}' was found by path guessing.`);
 				container.id = newUserInputContainer_ID;
+				window.userInputContainer = container;
 				resolve( container );
 			}
 		}
