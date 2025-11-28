@@ -87,18 +87,28 @@ function triggerSetUp() {
 				const parentId = event.detail.element.parentElement.id;
 
 				if (parentId === window.PROMPT_COMPRESSOR_ID) {
-					const compressionMethod = event.detail.id;
-					const textArea = document.getElementById('prompt-textarea');
-					const textElements = textArea.querySelectorAll('p');
-
-					let collectedText = '';
-					textElements.forEach((element) => {
-						if (!element.textContent) return;
-						collectedText += element.textContent;
-					})
-					if (collectedText === '') return;
-					const compressedText = window.__registry__[window.PROMPT_COMPRESSOR_ID].methods.toggle_method(compressionMethod, collectedText);
-					textArea.innerHTML = `<p>${compressedText}</p>`
+					// posemirror is messing with decorating text by it's own
+					// putting them in multiple <p> tags
+					// so running multiple times was to be the fix
+					let delay = 0;
+					for (let i=0; i < 5; i++) {
+						setTimeout(() => {
+							const compressionMethod = event.detail.id;
+							const textArea = document.getElementById('prompt-textarea');
+							const textElements = textArea.querySelectorAll('p');
+	
+							let collectedText = '';
+							textElements.forEach((element) => {
+								if (!element.textContent) return;
+								collectedText += element.textContent + '\n';
+							})
+							if (collectedText === '') return;
+	
+							const compressedText = window.__registry__[window.PROMPT_COMPRESSOR_ID].methods.toggle_method(compressionMethod, collectedText);
+							textArea.innerHTML = `<p>${compressedText}</p>`
+						}, delay)
+						delay += 100;
+					}
 				}
 			}
 			// === Apply grandparent container styles ===

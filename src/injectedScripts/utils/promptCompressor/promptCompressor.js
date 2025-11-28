@@ -269,7 +269,7 @@ function togglePromptCompressor(compressionMethod, text) {
 				text = text.replace(regex, value);
 			}
 		}
-		
+
 		text = text.trim() // remove any trailing and non trailing spaces after regex operation if any remains
 	}
 
