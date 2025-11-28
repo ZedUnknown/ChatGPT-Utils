@@ -5,10 +5,8 @@ const ID = 'GPTU-UIC-R';
 const GPTU_UIC_R = document.createElement('div');
 
 // update theme
-let currentTheme = window.currentTheme;
 window.addEventListener('themeChanged', (e) => {
-    currentTheme = e.detail.theme;
-	// window.get_GPTU_UIC_R(); <-- not needed as all utils will call this when they detect a theme update
+	window.get_GPTU_UIC_R();
 });
 
 let userInputContainer = null
@@ -32,7 +30,7 @@ window.get_GPTU_UIC_R = function () {
 
 				// update theme if exists
 				if (document.getElementById(ID)) {
-					if (DEBUG) console.log(`${PREFIX} Updating the ${ID} theme to: ${currentTheme}.`);
+					if (DEBUG) console.log(`${PREFIX} Updating the ${ID} theme to: ${window.currentTheme}.`);
                     const isDark = (window.currentTheme === 'dark');
                     GPTU_UIC_R.classList.toggle('dark', isDark);
 					resolve({id: ID, container: GPTU_UIC_R});

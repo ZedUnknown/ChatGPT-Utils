@@ -1,5 +1,5 @@
 const DEBUG = false;
-const PREFIX = 'Click |';
+const PREFIX = 'On Click |';
 
 let clickListenerAdded = false;
 

@@ -2,7 +2,7 @@ const DEBUG = false;
 const PREFIX = 'trig_GPTU-UIC-R |';
 
 // ===[Containers]===
-let userInputContainer = null;
+let userInputContainer = window.userInputContainer; // as a fallback
 let GPTU_UIC_R_ID = null;
 let GPTU_UIC_R_CONTAINER = null;
 
@@ -23,15 +23,6 @@ function init() {
 		userInputContainer = container;
 
 		if (userInputContainer) {
-			if (DEBUG) console.log(`${PREFIX} Found userInputContainer:`, userInputContainer);
-
-			// attach observer to grand container to detect changes
-			window.observeElementChange(userInputContainer, () => {
-				if (DEBUG) console.log(`${PREFIX} userInputContainer changed...`);
-				window.getUserInputContainer().then((container) => {
-					userInputContainer = container;
-				})
-			})
 			// copy only required styles
 			userInputContainerStyles = window.getStylesSnapshot(userInputContainer, ['width', 'height', 'left', 'top', 'right', 'bottom', 'borderRadius']);
 			
@@ -49,6 +40,7 @@ function init() {
 				
 				try {
 					// prevent recreation if util is disabled in initial storage update in 'utilsConfigUpdate'
+					console.log('storage enable for token counter:', window.__registry__[window.TOKEN_COUNTER_ID].configs.enable)
 					if (window.__registry__[window.TOKEN_COUNTER_ID].configs.enable) window.__registry__[window.TOKEN_COUNTER_ID].methods.create_method();
 					if (window.__registry__[window.WORD_COUNTER_ID].configs.enable) window.__registry__[window.WORD_COUNTER_ID].methods.create_method();
 				} catch (e) {

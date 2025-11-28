@@ -3,6 +3,8 @@
     --text-primary: #0D0D0D;
     --text-secondary: #5d5d5d;
     --border-primary: #0D0D0D;
+    --shadow-primary: #000000;
+    --shadow-secondary: #ffffff;
 }
 
 .dark {
@@ -10,6 +12,8 @@
     --text-primary: #ffffff;
     --text-secondary: #b4b4b4;
     --border-primary: #ffffff36;
+    --shadow-primary: #ffffff;
+    --shadow-secondary: #000000;
 }
 
 #userInputContainer_ID {
@@ -45,7 +49,7 @@
     min-width: 120px;
     max-width: 800px;
     min-height: 45px;
-    opacity: 1;
+    opacity: 0;
     transition: opacity 0.2s ease-in-out, bottom 0.2s ease-in-out, right 0.2s ease-in-out, margin-bottom 0.2s ease-in-out, border-radius 0.2s ease-in-out, height 0.2s ease-in-out, width 0.2s ease-in-out, min-height 0.2s ease-in-out, min-width 0.2s ease-in-out;
     z-index: -1;
 }
@@ -69,7 +73,7 @@
     z-index: -1;
     padding: 0.2rem;
     max-height: 32px;
-    opacity: 1;
+    opacity: 0;
     border-radius: 0px 0px 8px 8px;
     color: var(--text-secondary);
     background-color: var(--background-primary);
@@ -85,32 +89,49 @@
 @keyframes appear {
     100% {
         top: 100%;
+        opacity: 1;
     }
 }
 
 .utils-in-GPTU-UIC-B {
-    display: inline-block;
-    background-color: var(--text-primary);
-    border-radius: 4px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
     height: 100%;
-    padding: 0.1rem;
-    text-align: center;
-    color: var(--background-primary);
-    cursor: pointer;
 }
 
-.utils-in-GPTU-UIC-B:hover,
-.utils-in-GPTU-UIC-B.dark:hover {
+.compression-utils {
+    display: inline-block;
+    border: none;
+    padding: 0.1rem;
+    border-radius: 4px;
+    text-align: center;
+    color: var(--background-primary);
+    background-color: var(--text-primary);
+}
+
+.compression-utils:hover {
     background-color: color-mix(in srgb, var(--text-primary) 80%, transparent);
 }
 
+.clickable {
+    cursor: pointer;
+    box-shadow: inset 0 -2px 0 color-mix(in srgb, var(--shadow-secondary) 50%, transparent);
+}
+
+.clickable:active {
+    box-shadow:inset 0 -2px 0 var(--background-primary);
+    transform: translateY(2px);
+}
+
 /* Tooltip styles */
-.utils-in-GPTU-UIC-B[data-tooltip] {
+.compression-utils[data-tooltip] {
     position: relative;
     z-index: 10;
 }
 
-.utils-in-GPTU-UIC-B[data-tooltip]::after {
+.compression-utils[data-tooltip]::after {
     content: attr(data-tooltip);
     position: absolute;
     bottom: 100%;
@@ -129,7 +150,7 @@
     z-index: 99999;
 }
 
-.utils-in-GPTU-UIC-B[data-tooltip]:hover::after {
+.compression-utils[data-tooltip]:hover::after {
     opacity: 1;
     visibility: visible;
 }

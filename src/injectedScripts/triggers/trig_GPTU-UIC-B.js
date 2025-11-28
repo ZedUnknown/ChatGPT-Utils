@@ -2,7 +2,7 @@ const DEBUG = false;
 const PREFIX = 'trig_GPTU-UIC-B |';
 
 // ===[Containers]===
-let userInputContainer = null;
+let userInputContainer = window.userInputContainer; // as a fallback
 let GPTU_UIC_B_ID = null;
 let GPTU_UIC_B_CONTAINER = null;
 
@@ -17,20 +17,11 @@ let attempts = 0;
 function init() {
 	if (DEBUG) console.log(`${PREFIX} init called...`);
 
-	// taking userinput container to animate it's coners in this case
+	// to attach the new container in this case
 	window.getUserInputContainer().then((container) => {
 		userInputContainer = container;
 
 		if (userInputContainer) {
-			if (DEBUG) console.log(`${PREFIX} Found userInputContainer:`, userInputContainer);
-
-			// attach observer to grand container to detect changes
-			window.observeElementChange(userInputContainer, () => {
-				if (DEBUG) console.log(`${PREFIX} userInputContainer changed...`);
-				window.getUserInputContainer().then((container) => {
-					userInputContainer = container;
-				})
-			})
 			// copy only required styles
 			userInputContainerStyles = window.getStylesSnapshot(userInputContainer, ['width', 'height', 'left', 'top', 'right', 'bottom', 'borderRadius']);
 			
@@ -84,29 +75,35 @@ function triggerSetUp() {
 			if (clickHandler) return;
 
 			clickHandler = (event) => {
-				const clickedId = event.detail.id;
+				const parentId = event.detail.element.parentElement.id;
 
-				if (clickedId === window.PROMPT_COMPRESSOR_ID) {
-					const textArea = document.getElementById('prompt-textarea');
-					const textElements = textArea.querySelectorAll('p');
-
-					let collectedText = '';
-					textElements.forEach((element) => {
-						if (!element.textContent) return;
-						collectedText += element.textContent;
-					})
-					if (collectedText === '') return;
-					const compressedText = window.__registry__[window.PROMPT_COMPRESSOR_ID].methods.toggle_method(collectedText);
-					textArea.innerHTML = `<p>${compressedText}</p>`
+				if (parentId === window.PROMPT_COMPRESSOR_ID) {
+					// posemirror is messing with decorating text by it's own
+					// putting them in multiple <p> tags
+					// so running multiple times was to be the fix
+					let delay = 0;
+					for (let i=0; i < 5; i++) {
+						setTimeout(() => {
+							const compressionMethod = event.detail.id;
+							const textArea = document.getElementById('prompt-textarea');
+							const textElements = textArea.querySelectorAll('p');
+	
+							let collectedText = '';
+							textElements.forEach((element) => {
+								if (!element.textContent) return;
+								collectedText += element.textContent + '\n';
+							})
+							if (collectedText === '') return;
+	
+							const compressedText = window.__registry__[window.PROMPT_COMPRESSOR_ID].methods.toggle_method(compressionMethod, collectedText);
+							textArea.innerHTML = `<p>${compressedText}</p>`
+						}, delay)
+						delay += 100;
+					}
 				}
 			}
-			// === Apply grandparent container styles ===
-			// window.observeElementChange(userInputContainer, () => {
-			// 	if (DEBUG) console.log(`${PREFIX} userInputContainer changed...`);
-			// 	init()
-			// })
-
 			window.addEventListener('getClick', clickHandler);
+
 			// reset everything on a page change (reinitialize after page change)
 			window.observePageChange([reset]);
 

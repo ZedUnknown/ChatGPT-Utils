@@ -37,11 +37,11 @@ document.addEventListener('configUpdated', (e) => {
         }
 	}
     // [Word Counter]
-    	if (config?.utils?.wordCounter?.enable !== undefined) {
-            // same object in memory
-            const wordCounter = window.__registry__[window.WORD_COUNTER_ID];
-            // for safety it uses the global updated config if the passed one gives unexpected values
-            let enable = config.utils.wordCounter.enable || window.__config__.utils.wordCounter.enable;
+    if (config?.utils?.wordCounter?.enable !== undefined) {
+        // same object in memory
+        const wordCounter = window.__registry__[window.WORD_COUNTER_ID];
+        // for safety it uses the global updated config if the passed one gives unexpected values
+        let enable = config.utils.wordCounter.enable || window.__config__.utils.wordCounter.enable;
         // if there is a change in the state, then update the state
         if (enable !== wordCounter.configs.enable) {
             if (DEBUG) console.log(`${PREFIX} Word Counter: ${enable ? 'Enabled' : 'Disabled'}`);
