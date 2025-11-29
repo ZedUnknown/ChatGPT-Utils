@@ -19,6 +19,7 @@
 A personal learning project creating utilities to improve the ChatGPT experience.
 
 🎫 **Token Counter**  
+
 Quickly see how many tokens your selected text will consume. Perfect for both free and paid users who want to monitor usage efficiently.
 - Powered by OpenAI-compatible tokenizers (`o200k` and `cl100k` support)
 
@@ -28,7 +29,9 @@ Quickly see how many tokens your selected text will consume. Perfect for both fr
   ![Token Counter](https://raw.githubusercontent.com/DaveUnknown/image-library/main/ChatGPT-Utils/token-counter.png)
 </details>
 
-🈸 **Word Counter**  
+---
+🈸 **Word Counter** 
+
 Instantly count the number of words in your selected text.
 - Powered by **Alfaaz**, the fastest known word counter (credit to [@thecodrr](https://github.com/thecodrr/alfaaz)).
 
@@ -38,6 +41,22 @@ Instantly count the number of words in your selected text.
   ![Word Counter](https://raw.githubusercontent.com/DaveUnknown/image-library/main/ChatGPT-Utils/word-counter.png)
 </details>
 
+---
+📜 **Prompt Compressor**  
+
+Instantly compresses your prompt to preserve tokens.
+| Compression Method         | What It Does                                                                                  | Estimated Token Preservation                                                             | Best Use Case                                                                                           |
+| -------------------------- | --------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Whitespace Compression** | Removes unnecessary spacing to reduce token count without altering meaning.                   | ~15–40% fewer tokens (varies with formatting density).                                      | Ideal for long prompts where formatting isn't semantically important (e.g., notes, paragraphs, codes). |
+| **Lexical Compression**    | Shortens text by replacing verbose phrases with concise equivalents while preserving meaning. | ~5–20% fewer tokens (highly dependent on prompt structure and verbosity).                 | Best for prompts containing repeated or verbose explanations (e.g., instructions, paragraphs, references). |
+
+<details>
+<summary>Click Here to Preview</summary>
+   
+  ![Prompt Compressor](https://raw.githubusercontent.com/DaveUnknown/image-library/main/ChatGPT-Utils/prompt-compressor.png)
+</details>
+
+---
 ## Installation
 Here are a few improved versions of your installation guide, focusing on clarity, conciseness, and user-friendliness.
 
@@ -66,7 +85,9 @@ The current version only includes the **Token Counter**, but more utilities and 
 - [x] **Word Counter**
 - [x] **Multi Tokenizers**
 - [x] **Utility Selection UI**
+- [x] **Prompt Compressor**
 - [ ] **Token Tracker**
+- [ ] **Analytics Dashboard**
 - [ ] **Chat Exporter**
 - [ ] **Chat Organizer**
 - [ ] **Grammar Checker**
