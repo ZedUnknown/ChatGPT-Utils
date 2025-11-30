@@ -89,10 +89,9 @@ The current version only includes the **Token Counter**, but more utilities and 
 - [ ] **Token Tracker**
 - [ ] **Analytics Dashboard**
 - [ ] **Chat Exporter**
-- [ ] **Chat Organizer**
-- [ ] **Grammar Checker**
+- [ ] **~Chat Organizer~ (deprecated)**
 - [ ] **Theme Customizer**
-- [ ] **Free AI Service via OpenWeb UI**
+- [ ] **AI Hub**
 **and many more...**
 
 Stay tuned for regular feature drops and UI improvements!
