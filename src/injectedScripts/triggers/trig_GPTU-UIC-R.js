@@ -112,7 +112,6 @@ function triggerSetUp() {
 				} else {
 					GPTU_UIC_R_CONTAINER.style.zIndex = -1;
 				}
-				GPTU_UIC_R_CONTAINER.style.right = isTextSelected ? '-1px' : '0px';
 				GPTU_UIC_R_CONTAINER.style.marginBottom = isTextSelected ? '0' : '5px';
 				GPTU_UIC_R_CONTAINER.style.borderRadius = isTextSelected ? "18px 18px 0px 0px" : userInputContainerStyles.borderRadius;
 				GPTU_UIC_R_CONTAINER.style.opacity = isTextSelected ? 1 : 0;
