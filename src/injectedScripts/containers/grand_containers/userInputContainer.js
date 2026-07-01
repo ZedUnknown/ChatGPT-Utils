@@ -6,7 +6,7 @@ const userInputContainerClass_Dark = 'bg-token-bg-primary.flex.w-full.cursor-tex
 const userInputContainerClass_Light = 'bg-token-bg-primary.flex.w-full.cursor-text.flex-col.items-center.justify-center.overflow-clip.bg-clip-padding.contain-inline-size.dark\\:bg-\\[\\#303030\\].shadow-short.rounded-\\[28px\\]';
 
 // bottomContainer > oldUserInputContainer == newUserInputContainer
-const oldUserInputContainer_ID = 'bg-token-bg-primary'; // 'group\\/composer' or 'bg-token-bg-primary'
+const oldUserInputContainer_ID = 'w-full'; // 'group\\/composer' or 'bg-token-bg-primary'
 const newUserInputContainer_ID = 'userInputContainer_ID';
 
 /* find the bottom container to add the utils
@@ -21,7 +21,9 @@ window.getUserInputContainer = function () {
 			if (DEBUG) console.log(`${PREFIX} Unable to locate the bottom container.`);
 			resolve(false);
 		}
-		bottomContainer.style.position = 'relative';
+
+		bottomContainer.style.position = 'sticky';
+		bottomContainer.style.zIndex = '9999';
 	
 		// 1. attempt to locate the container by assigned custom ID: bg-token-bg-primary (if already exists)
 		if (DEBUG) console.log(`${PREFIX} Attempting to locate the '${newUserInputContainer_ID}' by custom ID.`);
