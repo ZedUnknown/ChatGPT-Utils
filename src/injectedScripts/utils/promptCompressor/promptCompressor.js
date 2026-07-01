@@ -47,23 +47,19 @@ const iconLexicalCompression = `<svg width="20" height="20" viewBox="0 0 20 20" 
 
 // children doctionary
 const childrens = {
-	whitespaceCompression: {
-		element: document.createElement('div'),
-		attributes: {
-			"data-tooltip": "Whitespace Compression"
-		},
-		classList: ["compression-utils", "clickable"],
-		innerHTML: iconWhitespaceCompression
-	},
-	lexicalCompression: {
-		element: document.createElement('div'),
-		attributes: {
-			"data-tooltip": "Lexical Compression"
-		},
-		classList: ["compression-utils", "clickable"],
-		innerHTML: iconLexicalCompression
-	}
-}
+    whitespaceCompression: {
+        element: document.createElement('div'),
+        attributes: { "data-tooltip": "Whitespace Compression" },
+        classList: ["compression-utils", "clickable", "has-extension-tooltip"],
+        innerHTML: iconWhitespaceCompression
+    },
+    lexicalCompression: {
+        element: document.createElement('div'),
+        attributes: { "data-tooltip": "Lexical Compression" },
+        classList: ["compression-utils", "clickable", "has-extension-tooltip"],
+        innerHTML: iconLexicalCompression
+    }
+};
 
 function createPromptCompressor(parentContainer) {
 	// update theme if exists
@@ -127,7 +123,7 @@ function togglePromptCompressor(compressionMethod, text) {
 			"if it is not too much trouble": "",
 			"i hope you are able to": "do",
 			"i am hoping that you can": "do",
-			
+
 			// 2. Conjunctions and connectors
 			"in order to": "to",
 			"so that": "to",
@@ -160,7 +156,7 @@ function togglePromptCompressor(compressionMethod, text) {
 			"for the sake of": "for",
 			"with the intention of": "to",
 			"with the aim of": "to",
-			
+
 			// 3. Instruction and action verbs
 			"provide": "give",
 			"give": "give",
@@ -199,7 +195,7 @@ function togglePromptCompressor(compressionMethod, text) {
 			"write up": "write",
 			"draft": "write",
 			"document": "write",
-			
+
 			// 4. Temporal phrases
 			"at this moment in time": "now",
 			"prior to": "before",
@@ -212,7 +208,7 @@ function togglePromptCompressor(compressionMethod, text) {
 			"in the meantime": "meanwhile",
 			"from this point forward": "from now",
 			"henceforth": "from now",
-			
+
 			// 5. Academic / technical verbose phrases
 			"with respect to": "about",
 			"in terms of": "about",
@@ -230,7 +226,7 @@ function togglePromptCompressor(compressionMethod, text) {
 			"it is necessary to": "must",
 			"it is recommended that": "recommend",
 			"one should": "must",
-			
+
 			// 6. Legal / formal verbose phrases
 			"pursuant to": "under",
 			"in accordance with": "under",
@@ -242,7 +238,7 @@ function togglePromptCompressor(compressionMethod, text) {
 			"to the extent that": "if",
 			"at the discretion of": "if",
 			"for all intents and purposes": "effectively",
-			
+
 			// 7. Miscellaneous verbose constructions
 			"with reference to": "about",
 			"in connection with": "about",
@@ -279,7 +275,7 @@ function togglePromptCompressor(compressionMethod, text) {
 // ===[Kill Method]===
 function killPromptCompressor() {
     if (DEBUG) console.log(`${PREFIX} 🪦 Killing the prompt compressor...`);
-    
+
     if (PromptCompressor_Element) {
         PromptCompressor_Element.remove();
     }
