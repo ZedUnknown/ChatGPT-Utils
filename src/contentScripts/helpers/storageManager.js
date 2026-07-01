@@ -45,6 +45,7 @@ window.sendInitialUpdate = async function (_key = 'config', _namespace='sync') {
     console.log(`window.__handshake__forInitialUpdate: ${window.__handshake__forInitialUpdate}`)
     const sendUpdate = () => {
         storageArea.get(_key, (data) => {
+            if (window.__handshake__forInitialUpdate) return;
             window.postMessage({
                 action: "updatedStorage",
                 key: _key,
@@ -72,7 +73,7 @@ window.sendInitialUpdate = async function (_key = 'config', _namespace='sync') {
             clearInterval(retry);
             if (DEBUG) console.log(`${PREFIX} Handshake already successful. Stopping retries.`);
         }
-    })
+    }, 250);
 
     window.addEventListener("message", (e) => {
         if (e.source !== window || !e.data || !e.data.handshake || typeof e.data.action !== 'string') {
@@ -80,6 +81,7 @@ window.sendInitialUpdate = async function (_key = 'config', _namespace='sync') {
         }
         if (e.data.action === "updatedStorageConfirmed") {
             window.__handshake__forInitialUpdate = e.data.handshake;
+            clearInterval(retry);
             if (DEBUG) console.log(`${PREFIX} Handshake received successfuly!`);
         }
     });

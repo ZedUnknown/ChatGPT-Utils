@@ -31,7 +31,7 @@ window.get_GPTU_UIC_B = function () {
 				} else {
 					// try..!!! to create a new
 					if (DEBUG) console.log(`${PREFIX} Attempting to create the ${ID}...`);
-					GPTU_UIC_B.id = ID;;
+					GPTU_UIC_B.id = ID;
 					if (DEBUG) console.log(`${PREFIX} The ${ID} has been created successfully.`);
 	
 					// append to PARENT_CONTAINER and return

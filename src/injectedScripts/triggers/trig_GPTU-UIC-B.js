@@ -24,7 +24,7 @@ function init() {
 		if (userInputContainer) {
 			// copy only required styles
 			userInputContainerStyles = window.getStylesSnapshot(userInputContainer, ['width', 'height', 'left', 'top', 'right', 'bottom', 'borderRadius']);
-			
+
 			/*
 			* take the GPTU_UIC_B_CONTAINER and run:
 			*    - create_method
@@ -34,7 +34,7 @@ function init() {
 				if (DEBUG) console.log(`${PREFIX} Found parentContainer:`, container);
 				GPTU_UIC_B_ID = id;
 				GPTU_UIC_B_CONTAINER = container;
-	
+
 				try {
 					if (window.__registry__[window.PROMPT_COMPRESSOR_ID].methods.create_method) window.__registry__[window.PROMPT_COMPRESSOR_ID].methods.create_method();
 				} catch (e) {
@@ -87,16 +87,33 @@ function triggerSetUp() {
 							const compressionMethod = event.detail.id;
 							const textArea = document.getElementById('prompt-textarea');
 							const textElements = textArea.querySelectorAll('p');
-	
+
 							let collectedText = '';
 							textElements.forEach((element) => {
 								if (!element.textContent) return;
 								collectedText += element.textContent + '\n';
 							})
 							if (collectedText === '') return;
-	
+
 							const compressedText = window.__registry__[window.PROMPT_COMPRESSOR_ID].methods.toggle_method(compressionMethod, collectedText);
-							textArea.innerHTML = `<p>${compressedText}</p>`
+							textArea.innerHTML = ``;
+
+							const lines = compressedText.split('\n');
+							lines.forEach((line) => {
+								const p = document.createElement('p');
+								if (line.trim() === '') {
+									// preserve blank structural spacing line if empty
+									p.appendChild(document.createElement('br'));
+								} else {
+									p.textContent = line;
+								}
+								textArea.appendChild(p);
+							});
+
+							// force ProseMirror's state manager to ingest the modification cleanly
+							textArea.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+							textArea.focus();
+
 						}, delay)
 						delay += 100;
 					}
@@ -130,7 +147,7 @@ function reset() {
     } catch (e) {
         if (DEBUG) console.error(`${PREFIX} Error while killing GPTU_UIC_B: ${e}`);
     }
-	
+
     // 3) clear references and styles
 	if (GPTU_UIC_B_CONTAINER) GPTU_UIC_B_CONTAINER.style.zIndex = -1;
     userInputContainer = null;
