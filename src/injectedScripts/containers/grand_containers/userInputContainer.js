@@ -14,9 +14,20 @@ this function may change over time since it require constant adaptation to the
 changes made to the UI by Oppenheimer, *cough OpenAI */
 
 // intervals are not being used as it gives the expected result without them
+let container;
 window.getUserInputContainer = function () {
 	return new Promise((resolve) => {
-		let bottomContainer = document.getElementById("thread-bottom") || document.getElementById("thread-bottom-container");
+		const textarea = document.querySelector('textarea');
+		if (!textarea) {
+			if (DEBUG) console.log(`${PREFIX} Unable to locate the textarea.`);
+			resolve(false);
+		}
+
+		const nakedRootDiv = textarea.closest('form').querySelector(':scope > div:has(textarea)');
+
+		let bottomContainer = nakedRootDiv // document.getElementById("thread-bottom") || document.getElementById("thread-bottom-container");
+		console.log(`${PREFIX} bottomContainer:`, bottomContainer);
+
 		if (!bottomContainer) {
 			if (DEBUG) console.log(`${PREFIX} Unable to locate the bottom container.`);
 			resolve(false);
@@ -24,41 +35,53 @@ window.getUserInputContainer = function () {
 
 		bottomContainer.style.position = 'sticky';
 		bottomContainer.style.zIndex = '9999';
-	
+
 		// 1. attempt to locate the container by assigned custom ID: bg-token-bg-primary (if already exists)
-		if (DEBUG) console.log(`${PREFIX} Attempting to locate the '${newUserInputContainer_ID}' by custom ID.`);
-		let container = document.getElementById(newUserInputContainer_ID);
-		if (container) {
+		container = document.getElementById(newUserInputContainer_ID);
+		if (container && container instanceof Element) {
 			if (DEBUG) console.log(`${PREFIX} The container '${newUserInputContainer_ID}' already exists.`);
 			window.userInputContainer = container;
 			resolve( container );
+			return;
 		}
-	
+
 		// 2. attempt to locate the container by UID class name: bg-token-bg-primary)
-		if (DEBUG) console.log(`${PREFIX} Attempting to locate the '${newUserInputContainer_ID}' by UID '${oldUserInputContainer_ID}'.`);
 		container = bottomContainer.querySelectorAll(`.${oldUserInputContainer_ID}`)[0];
-		if (container) {
+		if (container && container instanceof Element) {
 			if (DEBUG) console.log(`${PREFIX} The ${newUserInputContainer_ID} was found by UID class.`);
 			container.id = newUserInputContainer_ID;
 			window.userInputContainer = container;
 			resolve( container );
+			return;
 		} else {
 			container = bottomContainer.querySelectorAll(`.${oldUserInputContainer_ID}`);
-			if (container) {
+			if (container && container instanceof Element) {
 				if (DEBUG) console.log(`${PREFIX} The ${newUserInputContainer_ID} was found by UID class.`);
 				container.id = newUserInputContainer_ID;
 				window.userInputContainer = container;
 				resolve( container );
+				return;
 			}
 		}
-	
-		// 3. attempt to locate the container by structure of the bottomContainer
-		if (DEBUG) console.log(`${PREFIX} Attempting to locate the '${newUserInputContainer_ID}' by structure of the bottomContainer.`);
+
+		// 3. attempt to locate the container by first child of bottomContainer
+		container = bottomContainer.firstElementChild;
+		console.log(`${PREFIX} bottomContainer.firstElementChild:`, container);
+		if (container && container instanceof Element) {
+			if (DEBUG) console.log(`${PREFIX} The ${newUserInputContainer_ID} was found by first child of bottomContainer.`);
+			container.id = newUserInputContainer_ID;
+			window.userInputContainer = container;
+			resolve( container );
+			return;
+		}
+
+
+		// 4. attempt to locate the container by structure of the bottomContainer
 		let paths = [
 			[0, 0, 1, 1, 0],
 			[0, 0, 1, 1, 1]
 		];
-	
+
 		for (let path of paths) {
 			container = findIt(bottomContainer, path);
 			if (container.classList.contains(oldUserInputContainer_ID)) {
@@ -68,6 +91,8 @@ window.getUserInputContainer = function () {
 				resolve( container );
 			}
 		}
+
+		resolve(null);
 	})
 }
 
