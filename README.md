@@ -58,7 +58,6 @@ Instantly compresses your prompt to preserve tokens.
 
 ---
 ## Installation
-Here are a few improved versions of your installation guide, focusing on clarity, conciseness, and user-friendliness.
 
 ### From the Chrome Web Store
 
