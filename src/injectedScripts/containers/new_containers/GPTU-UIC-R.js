@@ -15,13 +15,13 @@ window.get_GPTU_UIC_R = function () {
 		let elapsed = 0
 		const interval = 500
 		const timeout = 5000
-	
+
 		const parentInterval = setInterval(async () => {
 			userInputContainer = await window.getUserInputContainer()
-			if (userInputContainer || userInputContainer instanceof Element) {
+			if (userInputContainer && userInputContainer instanceof Element) {
 				clearInterval(parentInterval)
 				if (DEBUG) console.log(`${PREFIX} Found userInputContainer:`, userInputContainer);
-				
+
 				// ===[Initial Styles for userInputContainer]===
 				userInputContainer.style.setProperty('transition', 'border-radius 0.2s ease-in-out', 'important');
 
@@ -40,7 +40,7 @@ window.get_GPTU_UIC_R = function () {
 					GPTU_UIC_R.id = ID;
 					GPTU_UIC_R.style.borderRadius = initialBorderRadius;
 					if (DEBUG) console.log(`${PREFIX} The ${ID} has been created successfully.`);
-	
+
 					// append to PARENT_CONTAINER and return
 					userInputContainer.appendChild(GPTU_UIC_R);
 					if (DEBUG) console.log(`${PREFIX} The ${ID} has been inserted to ${userInputContainer} successfully.`);
@@ -48,7 +48,7 @@ window.get_GPTU_UIC_R = function () {
 				}
 			} else {
 				if (DEBUG) console.log(`${PREFIX} Waiting for ${userInputContainer}...`);
-				
+
 				elapsed += interval
 				if (elapsed >= timeout) {
 					clearInterval(parentInterval);

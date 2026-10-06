@@ -24,6 +24,8 @@
     transition: all 0.2s ease-in-out !important;
     box-shadow: none !important;
     background-color: var(--bg-primary) !important;
+    background-clip: border-box !important;
+    outline: none !important;
 }
 
 /* #userInputContainer_ID > *:not(#GPTU-UIC-R, #GPTU-UIC-B, #composer-plus-btn, #prompt-textarea) {
